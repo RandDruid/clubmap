@@ -38,8 +38,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 build_nr.target = build_number.h
-unix: build_nr.commands = /bin/bash $$PWD/build_number.sh $$PWD;/bin/bash $$PWD/../get_version.sh
-win32: build_nr.commands = bash $$PWD/build_number.sh $$PWD & bash $$PWD/../get_version.sh
+unix: build_nr.commands = cd $$PWD;/bin/bash $$PWD/build_number.sh $$PWD;/bin/bash $$PWD/../get_version.sh
+win32: build_nr.commands = cd $$PWD & bash $$PWD/build_number.sh $$PWD & bash $$PWD/../get_version.sh
 build_nr.depends = build_nr2
 build_nr2.commands = @echo Writing build number
 QMAKE_EXTRA_TARGETS += build_nr build_nr2

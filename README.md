@@ -7,7 +7,7 @@ Project have client and server parts. Server part consists of PHP page on server
 
 Application was created to work with vBulletin v.3.8.7, but it shouldn't be difficult to adopt it to other versions. To use application outside of forum infrastructure, you should build your own authentication scheme.
 
-Current project version created with [Qt][135ec22f] version 5.11.2. It compiles under Linux, Windows and Android. If connection to forum works over HTTPS (as in our case), [OpenSSL][33ce3abc] 1.0.* libraries are required on Linux and Android.
+Current project version created with [Qt][135ec22f] version 5.11.2. It compiles under Debian (targets: Debian, Android), Windows (target: Windows). If connection to forum works over HTTPS (as in our case), [OpenSSL][33ce3abc] 1.0.* libraries are required on Linux and Android.
 
 Application use QtLocation & QtPosition modules and [Open Street Map][1bd6bc8a] plugin.
 ## Roadmap

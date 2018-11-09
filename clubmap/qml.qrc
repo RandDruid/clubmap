@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>map/MapComponent.qml</file>
+        <file>menus/MapPopupMenu.qml</file>
+        <file>map/MiniMap.qml</file>
+        <file>map/Marker.qml</file>
+        <file>images/marker.png</file>
+        <file>images/scale.png</file>
+        <file>images/scale_end.png</file>
+        <file>forms/MessageForm.ui.qml</file>
+        <file>map/Target.qml</file>
+        <file>menus/MainDrawerForm.ui.qml</file>
+        <file>menus/MainDrawer.qml</file>
+        <file>images/down-arrow.png</file>
+        <file>images/left-arrow.png</file>
+        <file>images/menu.png</file>
+        <file>images/right-arrow.png</file>
+        <file>images/ticon0.png</file>
+        <file>images/ticon1.png</file>
+        <file>images/ticon2.png</file>
+        <file>images/ticon3.png</file>
+        <file>images/ticon4.png</file>
+        <file>images/ticon5.png</file>
+        <file>images/ticon6.png</file>
+        <file>images/ticon7.png</file>
+        <file>images/ticon8.png</file>
+        <file>images/ticon9.png</file>
+        <file>images/up-arrow.png</file>
+        <file>images/logo_medium.png</file>
+        <file>images/logo_small_square.png</file>
+        <file>clubmap_en.qm</file>
+        <file>clubmap_ru.qm</file>
+        <file>menus/TargetPopupMenu.qml</file>
+        <file>forms/AboutForm.ui.qml</file>
+        <file>images/logo.ico</file>
+    </qresource>
+</RCC>

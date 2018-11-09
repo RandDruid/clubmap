@@ -1,0 +1,339 @@
+import QtQuick 2.11
+import QtQuick.Controls 2.4
+import QtQuick.Layouts 1.3
+import "map"
+import "menus"
+import "forms"
+
+ApplicationWindow {
+    id: appWindow
+    visible: true
+    width: 640
+    height: 520
+    title: qsTr("ClubMap")
+
+    property variant map
+    property variant minimap
+    property variant parameters
+
+    function roundNumber(number, digits)
+    {
+        var multiple = Math.pow(10, digits);
+        return Math.round(number * multiple) / multiple;
+    }
+
+    function createMap(provider) {
+        var plugin
+
+        if (parameters && parameters.length > 0)
+            plugin = Qt.createQmlObject ('import QtLocation 5.9; Plugin{ name:"' + provider + '"; parameters: appWindow.parameters}', appWindow)
+        else
+            plugin = Qt.createQmlObject ('import QtLocation 5.9; Plugin{ name:"' + provider + '"}', appWindow)
+
+        if (minimap) {
+            minimap.destroy()
+            minimap = null
+        }
+
+        var zoomLevel = null
+        var tilt = null
+        var bearing = null
+        var fov = null
+        var center = null
+        if (map) {
+            zoomLevel = map.zoomLevel
+            tilt = map.tilt
+            bearing = map.bearing
+            fov = map.fieldOfView
+            center = map.center
+            map.destroy()
+        }
+
+        map = mapComponent;
+        map.plugin = plugin;
+
+        if (zoomLevel != null) {
+            map.tilt = tilt
+            map.bearing = bearing
+            map.fieldOfView = fov
+            map.zoomLevel = zoomLevel
+            map.center = center
+        } else {
+            map.zoomLevel = 11; // Math.floor((map.maximumZoomLevel - map.minimumZoomLevel)/2)
+            // defaulting to 45 degrees, if possible.
+            map.fieldOfView = Math.min(Math.max(45.0, map.minimumFieldOfView), map.maximumFieldOfView)
+        }
+
+        map.forceActiveFocus()
+    }
+
+    function initializeProviders(pluginParameters)
+    {
+        var parameters = []
+        for (var prop in pluginParameters){
+            var parameter = Qt.createQmlObject('import QtLocation 5.9; PluginParameter{ name: "'+ prop + '"; value: "' + pluginParameters[prop]+'"}',appWindow)
+            parameters.push(parameter)
+        }
+        appWindow.parameters = parameters
+        createMap("osm");
+    }
+
+    Component.onCompleted: {
+        drawer.load();
+    }
+
+    header: ToolBar {
+        contentHeight: 48
+        RowLayout {
+            anchors.fill: parent
+
+            Image {
+                Layout.alignment: Qt.AlignTop
+                Layout.maximumWidth: 48
+                Layout.maximumHeight: 48
+                source: stackView.depth > 1 ? "qrc:/images/left-arrow.png" : "qrc:/images/menu.png"
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (stackView.depth > 1) {
+                            stackView.pop()
+                        } else {
+                            drawer.open()
+                        }
+                    }
+                }
+            }
+
+            Label {
+                text: stackView.currentItem.title ? stackView.currentItem.title : ""
+                Layout.alignment: Qt.AlignVCenter
+            }
+        }
+    }
+
+    MapComponent{
+        id: mapComponent
+
+        property string textCCTitle: qsTr("Coordinates")
+        property string textCCMessage: qsTr("<b>Latitude: %1</b><br/><b>Longitude: %2</b>")
+        property string textECTitle: qsTr("ProviderError")
+        property string textECMessage: qsTr("%1<br/><br/><b>Map provider error</b>")
+
+        width: page.width
+        height: page.height
+        onFollowmeChanged: drawer.isFollowMe = map.followme
+        onCoordinatesCaptured:
+            stackView.showMessage(textCCTitle, textCCMessage.arg(roundNumber(latitude,6)).arg(roundNumber(longitude,6)));
+
+        onErrorChanged: {
+            if (map.error !== Map.NoError) {
+                stackView.showMessage(textECTitle, textECMessage.arg(map.errorString));
+            }
+        }
+        onShowMainMenu: mapPopupMenu.show(coordinate)
+        onShowTargetMenu: targetPopupMenu.show(coordinate)
+
+        onBoxChanged: webMan.setBox(longitudeMin, longitudeMax, latitudeMin, latitudeMax)
+    }
+
+    MapPopupMenu {
+        id: mapPopupMenu
+
+        function show(coordinate) {
+            stackView.pop(page)
+            mapPopupMenu.coordinate = coordinate
+            mapPopupMenu.markersCount = map.markers.length
+            mapPopupMenu.mapItemsCount = map.mapItems.length
+            mapPopupMenu.update()
+            mapPopupMenu.popup()
+        }
+
+        onItemClicked: {
+            stackView.pop(page)
+            switch (item) {
+            case "getCoordinate":
+                map.coordinatesCaptured(coordinate.latitude, coordinate.longitude)
+                break
+            default:
+                console.log("Unsupported operation")
+            }
+        }
+    }
+
+    TargetPopupMenu {
+        id: targetPopupMenu
+
+        property string textInfo: qsTr("InfoText")
+
+        function show(coordinate) {
+            stackView.pop(page)
+            targetPopupMenu.targetsCount = map.targets.length
+            targetPopupMenu.update()
+            targetPopupMenu.popup()
+        }
+
+        onItemClicked: {
+            stackView.pop(page)
+            switch (item) {
+                case "getTargetInfo":
+                    stackView.showMessage(
+                                map.targets[map.currentTarget].title,
+                                textInfo.arg(forumBaseUrl).arg(map.targets[map.currentTarget].userid));
+                    break;
+                case "getTargetCoordinate":
+                    map.coordinatesCaptured(map.targets[map.currentTarget].coordinate.latitude, map.targets[map.currentTarget].coordinate.longitude)
+                    break;
+                default:
+                    console.log("Unsupported operation")
+            }
+        }
+    }
+
+    MessageForm {
+        id: messageForm
+        messageText.onLinkActivated: Qt.openUrlExternally(link)
+    }
+
+    AboutForm {
+        id: aboutForm
+        messageText.onLinkActivated: Qt.openUrlExternally(link)
+    }
+
+    Drawer {
+        id: drawer
+
+        width: 350
+        height: appWindow.height
+
+        property bool isFollowMe: false;
+        property bool isMiniMap: false;
+        property variant component
+
+        onOpened: {
+            mainDrawer.adjustIcon();
+        }
+
+        onClosed: {
+            mainDrawer.save();
+        }
+
+        function finishCreation() {
+            if (component.status === Component.Ready) {
+                minimap = component.createObject(map);
+                if (minimap === null) {
+                    // Error Handling
+                    console.log("Error creating object");
+                }
+            } else if (component.status === Component.Error) {
+                // Error Handling
+                console.log("Error loading component:", component.errorString());
+            }
+            isMiniMap = minimap
+        }
+
+        function toggleMiniMapState()
+        {
+            if (minimap) {
+                minimap.destroy()
+                minimap = null
+            } else {
+                component = Qt.createComponent("map/MiniMap.qml");
+                if (component.status === Component.Ready)
+                    finishCreation();
+                else
+                    component.statusChanged.connect(finishCreation);
+            }
+        }
+
+        function setLanguage(lang)
+        {
+            map.plugin.locales = lang;
+            stackView.pop(page)
+        }
+
+        function load() {
+            mainDrawer.load();
+        }
+
+        MainDrawer {
+            id: mainDrawer
+            anchors.fill: parent
+
+            isFollowMe: isFollowMe
+            isMiniMap: isMiniMap
+            wantSendPositionInt: webMan.wantSendPositionInt
+            wantSendPositionBool: webMan.wantSendPositionBool
+            wantGetTargetsInt: webMan.wantGetTargetsInt
+            wantGetTargetsBool: webMan.wantGetTargetsBool
+            isPositionLive: webMan.positionLive
+            fixedPositionLatitude: fixedPositionSource.latitude
+            fixedPositionLongitude: fixedPositionSource.longitude
+            iconId: webMan.iconId
+
+            onChangeWantSendPositionInt: {
+                webMan.changeWantSendPositionInt(newValue);
+            }
+
+            onChangeWantSendPositionBool: {
+                webMan.changeWantSendPositionBool(newValue);
+            }
+
+            onChangeWantGetTargetsInt: {
+                webMan.changeWantGetTargetsInt(newValue);
+            }
+
+            onChangeWantGetTargetsBool: {
+                webMan.changeWantGetTargetsBool(newValue);
+            }
+
+            onChangePositionSource: {
+                webMan.changePositionSource(online);
+            }
+
+            onChangeFixedPosition: {
+                fixedPositionSource.setPosition(latitude, longitude);
+                drawer.close();
+            }
+
+            onChangeIcon: {
+                webMan.changeIcon(newValue);
+            }
+
+            onMenuTriggered: {
+                switch (item) {
+                    case "minimap": stackView.pop(page); drawer.toggleMiniMapState(); drawer.close(); break;
+                    case "followme": stackView.pop(page); map.followme = !map.followme; drawer.close(); break;
+                    case "about": stackView.push(aboutForm); drawer.close(); break;
+                    case "back": drawer.close(); break;
+                    default: break;
+                }
+            }
+        }
+    }
+
+    StackView {
+        id: stackView
+        initialItem: Item {
+            id: page
+        }
+        anchors.fill: parent
+
+        function showMessage(title, message)
+        {
+            push(messageForm, { "title" : title, "message" : message })
+        }
+
+        function closeMessage(backPage)
+        {
+            pop(backPage)
+        }
+
+        function closeForm()
+        {
+            pop(page)
+        }
+    }
+
+
+}

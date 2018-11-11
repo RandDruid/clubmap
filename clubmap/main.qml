@@ -84,32 +84,68 @@ ApplicationWindow {
 
     header: ToolBar {
         contentHeight: 48
-        RowLayout {
-            anchors.fill: parent
 
-            Image {
-                Layout.alignment: Qt.AlignTop
-                Layout.maximumWidth: 48
-                Layout.maximumHeight: 48
-                source: stackView.depth > 1 ? "qrc:/images/left-arrow.png" : "qrc:/images/menu.png"
+        Image {
+            id: imageMenu
+            width: 48
+            height: 48
+            anchors.left: parent.left
+            anchors.top: parent.top
+            source: stackView.depth > 1 ? "qrc:/images/left-arrow.png" : "qrc:/images/menu.png"
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        if (stackView.depth > 1) {
-                            stackView.pop()
-                        } else {
-                            drawer.open()
-                        }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (stackView.depth > 1) {
+                        stackView.pop()
+                    } else {
+                        drawer.open()
                     }
                 }
             }
+        }
 
-            Label {
-                text: stackView.currentItem.title ? stackView.currentItem.title : ""
-                Layout.alignment: Qt.AlignVCenter
+        Label {
+            id: labelTitle
+            anchors.centerIn: parent
+            anchors.leftMargin: 48
+            visible: labelTitle.text !== ""
+            text: stackView.currentItem.title ? stackView.currentItem.title : ""
+        }
+
+        Item {
+            anchors.fill: parent
+            anchors.leftMargin: 52
+
+            visible: labelTitle.text === ""
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.rightMargin: 48
+                anchors.topMargin: 2
+                anchors.bottomMargin: 2
+                spacing: 0
+
+                Label {
+                    text: webMan.statusText1
+                    // font.family: "Courier"
+                }
+                Label {
+                    text: webMan.statusText2
+                    // font.family: "Courier"
+                }
+            }
+
+            BusyIndicator {
+                anchors.right: parent.right
+                width: 48
+                height: 48
+
+                running: webMan.inProgress
+                visible: running
             }
         }
+
     }
 
     MapComponent{
@@ -246,12 +282,6 @@ ApplicationWindow {
             }
         }
 
-        function setLanguage(lang)
-        {
-            map.plugin.locales = lang;
-            stackView.pop(page)
-        }
-
         function load() {
             mainDrawer.load();
         }
@@ -270,6 +300,7 @@ ApplicationWindow {
             fixedPositionLatitude: fixedPositionSource.latitude
             fixedPositionLongitude: fixedPositionSource.longitude
             iconId: webMan.iconId
+            selectedLanguage: webMan.language
 
             onChangeWantSendPositionInt: {
                 webMan.changeWantSendPositionInt(newValue);

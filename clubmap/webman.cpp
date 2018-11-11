@@ -8,18 +8,23 @@ WebMan::WebMan(FixedPositionSource *fps, AppSettings *settings, QGuiApplication 
     this->application = application;
     this->engine = engine;
 
+    settingsRead = false;
+
     if (sourceFixed) {
         connect(sourceFixed, SIGNAL(positionUpdated(QGeoPositionInfo)),
                 this, SLOT(positionUpdated(QGeoPositionInfo)));
     }
     sourceCurrent = nullptr;
+    m_inProgress = false;
+    m_statusText1 = "";
+    m_statusText2 = "";
 
 //    m_positionLive = false;
 //    m_icon = 0;
 //    m_wantSendPosition = 60;
 //    m_wantGetTargets = 60;
 //    pushProperties();
-    loadSettings();
+    // loadSettings();
 
     connect(&qnam, &QNetworkAccessManager::authenticationRequired,
                 this, &WebMan::authenticationRequired);
@@ -63,73 +68,89 @@ void WebMan::setEnabled(bool enabled)
 
 void WebMan::changePositionSource(bool online)
 {
-    if (sourceDefault) sourceDefault->stopUpdates();
-    if (sourceFixed) sourceFixed->stopUpdates();
-    if (online)  {
-        if (!sourceDefault) {
-            sourceDefault = QGeoPositionInfoSource::createDefaultSource(this);
-            if (sourceDefault) {
-                connect(sourceDefault, SIGNAL(positionUpdated(QGeoPositionInfo)),
-                        this, SLOT(positionUpdated(QGeoPositionInfo)));
+    if (settingsRead) {
+        if (sourceDefault) sourceDefault->stopUpdates();
+        if (sourceFixed) sourceFixed->stopUpdates();
+        if (online)  {
+            if (!sourceDefault) {
+                sourceDefault = QGeoPositionInfoSource::createDefaultSource(this);
+                if (sourceDefault) {
+                    connect(sourceDefault, SIGNAL(positionUpdated(QGeoPositionInfo)),
+                            this, SLOT(positionUpdated(QGeoPositionInfo)));
+                }
             }
+            sourceCurrent = sourceDefault;
+        } else {
+            sourceCurrent = sourceFixed;
         }
-        sourceCurrent = sourceDefault;
-    } else {
-        sourceCurrent = sourceFixed;
+        if (sourceCurrent) sourceCurrent->startUpdates();
+
+        if (m_positionLive != online) {
+            m_positionLive = online;
+            positionLiveChanged(m_positionLive);
+        }
+
+        lastPositionSend = sourceCurrent->minimumUpdateInterval() / 1000 + 1;
+        lastTargetsGet = lastPositionSend + 1;
+
+        settings->setValueNV("local/positionSourceDefault", online ? "True" : "False");
     }
-    if (sourceCurrent) sourceCurrent->startUpdates();
-    positionLiveChanged(online);
-
-    lastPositionSend = sourceCurrent->minimumUpdateInterval() / 1000 + 1;
-    lastTargetsGet = lastPositionSend + 1;
-
-    settings->setValueNV("local/positionSourceDefault", online ? "True" : "False");
 }
 
 //------------------------------------------------------------------------------------------------------------- Slots for GUI to change properties
 
 void WebMan::changeWantGetTargetsInt(int newValue)
 {
-    m_wantGetTargetsInt = newValue;
-    wantGetTargetsIntChanged(m_wantGetTargetsInt);
-    lastTargetsGet = 0;
+    if (settingsRead) {
+        m_wantGetTargetsInt = newValue;
+        wantGetTargetsIntChanged(m_wantGetTargetsInt);
+        lastTargetsGet = 0;
 
-    settings->setValueNV("local/wantGetTargetsInt", m_wantGetTargetsInt);
+        settings->setValueNV("local/wantGetTargetsInt", m_wantGetTargetsInt);
+    }
 }
 
 void WebMan::changeWantGetTargetsBool(bool newValue)
 {
-    m_wantGetTargetsBool = newValue;
-    wantGetTargetsBoolChanged(m_wantGetTargetsBool);
-    lastTargetsGet = 0;
+    if (settingsRead) {
+        m_wantGetTargetsBool = newValue;
+        wantGetTargetsBoolChanged(m_wantGetTargetsBool);
+        lastTargetsGet = 0;
 
-    settings->setValueNV("local/wantGetTargetsBool", m_wantGetTargetsBool);
+        settings->setValueNV("local/wantGetTargetsBool", m_wantGetTargetsBool);
+    }
 }
 
 void WebMan::changeIcon(int newValue)
 {
-    m_icon = newValue;
-    iconIdChanged(m_icon);
+    if (settingsRead) {
+        m_icon = newValue;
+        iconIdChanged(m_icon);
 
-    settings->setValueNV("local/iconid", m_icon);
+        settings->setValueNV("local/iconid", m_icon);
+    }
 }
 
 void WebMan::changeWantSendPositionInt(int newValue)
 {
-    m_wantSendPositionInt = newValue;
-    wantSendPositionIntChanged(m_wantSendPositionInt);
-    lastPositionSend = 0;
+    if (settingsRead) {
+        m_wantSendPositionInt = newValue;
+        wantSendPositionIntChanged(m_wantSendPositionInt);
+        lastPositionSend = 0;
 
-    settings->setValueNV("local/wantSendPositionInt", m_wantSendPositionInt);
+        settings->setValueNV("local/wantSendPositionInt", m_wantSendPositionInt);
+    }
 }
 
 void WebMan::changeWantSendPositionBool(bool newValue)
 {
-    m_wantSendPositionBool = newValue;
-    wantSendPositionBoolChanged(m_wantSendPositionBool);
-    lastPositionSend = 0;
+    if (settingsRead) {
+        m_wantSendPositionBool = newValue;
+        wantSendPositionBoolChanged(m_wantSendPositionBool);
+        lastPositionSend = 0;
 
-    settings->setValueNV("local/wantSendPositionBool", m_wantSendPositionBool ? "True" : "False");
+        settings->setValueNV("local/wantSendPositionBool", m_wantSendPositionBool ? "True" : "False");
+    }
 }
 
 //------------------------------------------------------------------------------------------------------------- Take decision what to send and request
@@ -139,7 +160,16 @@ void WebMan::timerExpired()
     bool sendPosition = false;
     bool getTargets = false;
 
-    // pushProperties();
+    if (m_wantGetTargetsBool) {
+        lastTargetsGet--;
+        if ((lastTargetsGet < 1) || boxUpdated) {
+            lastTargetsGet = m_wantGetTargetsInt > 10 ? m_wantGetTargetsInt : 10;
+            getTargets = true;
+            boxUpdated = false;
+
+            lastPositionSend = 1; // force 'send' if will 'get'. Because 'send' adds almost no data to 'get'
+        }
+    }
 
     if (m_wantSendPositionBool) {
         lastPositionSend--;
@@ -154,21 +184,17 @@ void WebMan::timerExpired()
         }
     }
 
-    if (m_wantGetTargetsBool) {
-        lastTargetsGet--;
-        if ((lastTargetsGet < 1) || boxUpdated) {
-            lastTargetsGet = m_wantGetTargetsInt > 10 ? m_wantGetTargetsInt : 10;
-            getTargets = true;
-            boxUpdated = false;
-        }
-    }
-
     if (sendPosition || getTargets) {
         // if no requests in progress right now
         if (reply == nullptr) {
             startRequest(sendPosition, getTargets);
         }
     }
+
+    QString s1 = m_wantSendPositionBool ? lastPositionSend > -1 ? QString::number(lastPositionSend) : "*" : "-";
+    QString s2 = m_wantGetTargetsBool ? QString::number(lastTargetsGet) : "-";
+    m_statusText2 = tr("Next Post: %1  Next Get: %2").arg(s1, 4, '0').arg(s2, 4, '0');
+    statusText2Changed(m_statusText2);
 
 }
 
@@ -230,21 +256,41 @@ void WebMan::loadSettings()
 
     m_positionLive = settings->valueNV("local/positionSourceDefault", "True").toBool();
     changePositionSource(m_positionLive);
+
+    m_language = settings->valueNV("local/language", "auto").toString();
+    languageChanged(m_language);
+    QTimer::singleShot(200, this, SLOT(installTranslator()));
+
+    settingsRead = true;
 }
 
 //-------------------------------------------------------------------------------------------------------------
 
-void WebMan::setLanguage(QString localeName) {
+void WebMan::installTranslator() {
+    qDebug() << "translator: " << m_language;
+
     QTranslator translator;
     QLocale *locale;
-    if (localeName == "auto")
+    if (m_language == "auto")
         locale = new QLocale();
     else
-        locale = new QLocale(localeName);
+        locale = new QLocale(m_language);
     if (translator.load(*locale, QLatin1String("clubmap"), QLatin1String("_"), QLatin1String(":/")))
     {
         application->installTranslator(&translator);
         engine->retranslate();
+    }
+}
+
+void WebMan::setLanguage(QString localeName) {
+    if (settingsRead) {
+        qDebug() << "set: " << localeName;
+
+        m_language = localeName;
+        languageChanged(m_language);
+        installTranslator();
+
+        settings->setValueNV("local/language", m_language);
     }
 }
 
@@ -276,7 +322,8 @@ void WebMan::startRequest(bool sendPosition, bool getTargets)
                 uq.addQueryItem("vb_login_md5password_utf", this->md5password_utf);
                 uq.addQueryItem("cookieuser", "1");
             } else {
-                // can't do anything without login...
+                m_statusText1 = tr("Please configure Login and Password");
+                statusText1Changed(m_statusText1);
                 return;
             }
         }
@@ -304,16 +351,26 @@ void WebMan::startRequest(bool sendPosition, bool getTargets)
 
         url.setQuery(uq);
 
+        m_inProgress = true;
+        inProgressChanged(m_inProgress);
+        m_statusText1 = tr("Communicating with server...");
+        statusText1Changed(m_statusText1);
+
         reply = qnam.get(QNetworkRequest(url));
         connect(reply, &QNetworkReply::finished, this, &WebMan::httpFinished);
+    } else {
+        m_statusText1 = tr("Network is not available");
+        statusText1Changed(m_statusText1);
     }
 }
 
 void WebMan::setUser(QString login, QString password)
 {
     this->login = login;
-    this->md5password_utf = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
+    this->md5password_utf = QCryptographicHash::hash(str2binl(password), QCryptographicHash::Md5).toHex();
     this->md5password = QCryptographicHash::hash(str2ent(password), QCryptographicHash::Md5).toHex();
+
+    // qDebug() << this->md5password_utf << " : " << this->md5password << endl;
 
     settings->setValueNVEC("forum/login", this->login);
     settings->setValueNVEC("forum/md5password_utf", this->md5password_utf);
@@ -345,8 +402,15 @@ void WebMan::authenticationRequired(QNetworkReply *, QAuthenticator *authenticat
 
 void WebMan::httpFinished()
 {
+    m_inProgress = false;
+    inProgressChanged(m_inProgress);
+
     if (reply->error()) {
         QString nes = reply->errorString();
+
+        m_statusText1 = nes;
+        statusText1Changed(m_statusText1);
+
         reply->deleteLater();
         reply = nullptr;
         return;
@@ -359,10 +423,24 @@ void WebMan::httpFinished()
     }
 
     QByteArray test = reply->readAll();
-    QString t2 = QTextCodec::codecForName("UTF-8")->toUnicode(test);
+    QString t2 = QTextCodec::codecForName("UTF-8")->toUnicode(test).trimmed();
     qDebug() << t2;
-    m_lastTargetsStr = t2;
-    targetsListChanged(t2);
+    if (!t2.isEmpty()) {
+        if (t2.startsWith("userid")) {
+            m_lastTargetsStr = t2;
+            targetsListChanged(t2);
+
+            m_statusText1 = tr("Connection successfull %1").arg(QTime::currentTime().toString());
+            statusText1Changed(m_statusText1);
+
+        } else {
+            m_statusText1 = tr("Account blocked");
+            statusText1Changed(m_statusText1);
+        }
+    } else {
+        m_statusText1 = tr("Authentication failed");
+        statusText1Changed(m_statusText1);
+    }
 
     reply->deleteLater();
     reply = nullptr;
@@ -404,6 +482,16 @@ QByteArray WebMan::str2ent(QString str)
     return result;
 }
 
+QByteArray WebMan::str2binl(QString str)
+{
+    QByteArray bin;
+    byte mask = 0xFF;
+
+    for(int i = 0; i < str.length(); i += 1)
+        bin.append(char(str.at(i).unicode() & mask));
+
+    return bin;
+}
 //------------------------------------------------------------------------------------------------------------- READs for properties
 
 int WebMan::getIconId()

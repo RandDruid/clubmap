@@ -16,20 +16,16 @@ MainDrawerForm {
         {"imageSource": "qrc:/images/ticon9.png", "iconId": 9}
     ]
 
+    cbSelectLanguage.model: [
+        {"text": qsTr("Auto"), "value": "auto"},
+        {"text": "English", "value": "en_US"},
+        {"text": "Russian", "value": "ru_RU"}
+    ]
+
     property string strGetTargets: qsTr("Refresh\nevery:\n")
     property string strSendPosition: qsTr("Minimum\ninterval:\n")
 
     Component.onCompleted: {
-        switch (Qt.locale().name.substring(0,2)) {
-            case "en":
-                cbSelectLanguage.currentIndex = 0;
-                break;
-            case "ru":
-                cbSelectLanguage.currentIndex = 1;
-                break;
-            default:
-                cbSelectLanguage.currentIndex = 0;
-        }
     }
 
     function findIconItemById(itemId) {
@@ -104,9 +100,32 @@ MainDrawerForm {
         changePositionSource(switchPositionSourceDefault.checked)
     }
 
+    onSelectedLanguageChanged: {
+        for (var i = 0; i < cbSelectLanguage.model.length; i++) {
+            if (cbSelectLanguage.model[i].value === selectedLanguage) {
+                cbSelectLanguage.currentIndex = i;
+                return;
+            }
+        }
+        switch (Qt.locale().name.substring(0,2)) {
+            case "en":
+                cbSelectLanguage.currentIndex = 0;
+                break;
+            case "ru":
+                cbSelectLanguage.currentIndex = 1;
+                break;
+            default:
+                cbSelectLanguage.currentIndex = 0;
+        }
+    }
+
     cbSelectLanguage.onCurrentIndexChanged: {
-        if (cbSelectLanguage.currentIndex > -1) {
-            webMan.setLanguage(modelLanguages.get(cbSelectLanguage.currentIndex).value);
+        if ((cbSelectLanguage.currentIndex > -1) && (selectedLanguage.length > 0)) {
+        // if (cbSelectLanguage.currentIndex > -1) {
+            var lang = cbSelectLanguage.model[cbSelectLanguage.currentIndex].value;
+            if (lang !== selectedLanguage) {
+                webMan.setLanguage(lang);
+            }
         }
     }
 
@@ -119,8 +138,15 @@ MainDrawerForm {
         textSendPosition.text = formatTime(dialSendPosition.value, strSendPosition);
     }
 
+    textPassword.onActiveFocusChanged: {
+        if (textPassword.activeFocus) {
+            textPassword.selectAll();
+        }
+    }
+
     function load() {
         textLogin.text = settings.valueNVEC("forum/login", "");
+        textPassword.text = settings.valueNVEC("forum/md5password", "");
         webMan.loadSettings();
     }
 

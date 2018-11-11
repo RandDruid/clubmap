@@ -20,7 +20,6 @@ Item {
     property alias tumblerIcon: tumblerIcon
     property alias buttonBack: buttonBack
     property alias btnAbout: btnAbout
-    property alias modelLanguages: modelLanguages
 
     property alias buttonCredentials: buttonCredentials
     property alias textLogin: textLogin
@@ -37,6 +36,7 @@ Item {
     property bool isPositionLive
     property string fixedPositionLatitude
     property string fixedPositionLongitude
+    property string selectedLanguage
 
     property int iconId: -1
 
@@ -150,8 +150,8 @@ Item {
                         }
                         TextField {
                             id: textPassword
-                            echoMode: TextInput.PasswordEchoOnEdit
-                            text: ""
+                            echoMode: TextInput.Password
+                            passwordMaskDelay: 500
                             placeholderText: "password"
                             Layout.fillWidth: true
                         }
@@ -252,24 +252,6 @@ Item {
                 ComboBox {
                     id: cbSelectLanguage
                     textRole: "text"
-
-
-                    model: ListModel {
-                        id: modelLanguages
-
-                        ListElement {
-                            text: qsTr("Auto")
-                            value: "auto"
-                        }
-                        ListElement {
-                            text: "English"
-                            value: "en_US"
-                        }
-                        ListElement {
-                            text: "Russian"
-                            value: "ru_RU"
-                        }
-                    }
                 }
 
                 Item {

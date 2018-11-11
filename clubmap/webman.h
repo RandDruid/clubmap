@@ -33,6 +33,10 @@ public:
     Q_PROPERTY(bool wantGetTargetsBool MEMBER m_wantGetTargetsBool NOTIFY wantGetTargetsBoolChanged)
     Q_PROPERTY(int iconId READ getIconId NOTIFY iconIdChanged)
     Q_PROPERTY(QString lastTargetsStr MEMBER m_lastTargetsStr)
+    Q_PROPERTY(bool inProgress MEMBER m_inProgress NOTIFY inProgressChanged)
+    Q_PROPERTY(QString statusText1 MEMBER m_statusText1 NOTIFY statusText1Changed)
+    Q_PROPERTY(QString statusText2 MEMBER m_statusText2 NOTIFY statusText2Changed)
+    Q_PROPERTY(QString language MEMBER m_language NOTIFY languageChanged)
 
     void startRequest(bool sendPosition, bool getTargets);
     void setBox();
@@ -42,12 +46,14 @@ private:
     QGeoPositionInfoSource *sourceFixed;
     QGeoPositionInfoSource *sourceDefault;
     bool enabled;
+    bool settingsRead;
     bool m_positionLive;
 
     bool isEnabled();
     void setEnabled(bool enabled);
     QGeoCoordinate getCoordinate();
     QByteArray str2ent(QString str);
+    QByteArray str2binl(QString str);
 
     QUrl url;
     QNetworkAccessManager qnam;
@@ -79,6 +85,11 @@ private:
     double longitudeMin, longitudeMax;
     double latitudeMin, latitudeMax;
     QString m_lastTargetsStr;
+    QString m_language;
+
+    bool m_inProgress;
+    QString m_statusText1;
+    QString m_statusText2;
 
 signals:
     void positionChanged(const double latitude, const double longitude);
@@ -89,6 +100,10 @@ signals:
     void wantGetTargetsIntChanged(int newValue);
     void wantGetTargetsBoolChanged(bool newValue);
     void iconIdChanged(int newValue);
+    void inProgressChanged(bool newValue);
+    void statusText1Changed(QString newValue);
+    void statusText2Changed(QString newValue);
+    void languageChanged(QString newValue);
 
 public slots:
     void changeWantSendPositionInt(int newValue);
@@ -108,6 +123,7 @@ private slots:
     void positionUpdated(const QGeoPositionInfo &pos);
     void authenticationRequired(QNetworkReply *, QAuthenticator *authenticator);
     void httpFinished();
+    void installTranslator();
 
 };
 

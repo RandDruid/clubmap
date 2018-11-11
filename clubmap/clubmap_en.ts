@@ -27,7 +27,12 @@
 <context>
     <name>MainDrawer</name>
     <message>
-        <location filename="menus/MainDrawer.qml" line="19"/>
+        <location filename="menus/MainDrawer.qml" line="20"/>
+        <source>Auto</source>
+        <translation type="unfinished">Auto</translation>
+    </message>
+    <message>
+        <location filename="menus/MainDrawer.qml" line="25"/>
         <source>Refresh
 every:
 </source>
@@ -36,7 +41,7 @@ every:
 </translation>
     </message>
     <message>
-        <location filename="menus/MainDrawer.qml" line="20"/>
+        <location filename="menus/MainDrawer.qml" line="26"/>
         <source>Minimum
 interval:
 </source>
@@ -45,18 +50,18 @@ interval:
 </translation>
     </message>
     <message>
-        <location filename="menus/MainDrawer.qml" line="132"/>
+        <location filename="menus/MainDrawer.qml" line="158"/>
         <source>never</source>
         <translation>never</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawer.qml" line="134"/>
-        <location filename="menus/MainDrawer.qml" line="136"/>
+        <location filename="menus/MainDrawer.qml" line="160"/>
+        <location filename="menus/MainDrawer.qml" line="162"/>
         <source> sec</source>
         <translation> sec</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawer.qml" line="136"/>
+        <location filename="menus/MainDrawer.qml" line="162"/>
         <source> min </source>
         <translation> min </translation>
     </message>
@@ -101,7 +106,6 @@ interval:
     </message>
     <message>
         <location filename="menus/MainDrawerForm.ui.qml" line="209"/>
-        <location filename="menus/MainDrawerForm.ui.qml" line="261"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
@@ -116,12 +120,12 @@ interval:
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="281"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="263"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="287"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="269"/>
         <source>Icon</source>
         <translation>Icon</translation>
     </message>
@@ -174,6 +178,44 @@ interval:
     </message>
 </context>
 <context>
+    <name>WebMan</name>
+    <message>
+        <location filename="webman.cpp" line="325"/>
+        <source>Please configure Login and Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="196"/>
+        <source>Next Post: %1  Next Get: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="356"/>
+        <source>Communicating with server...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="362"/>
+        <source>Network is not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="433"/>
+        <source>Connection successfull %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="437"/>
+        <source>Account blocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="441"/>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="main.qml" line="13"/>
@@ -181,28 +223,28 @@ interval:
         <translation>ClubMap</translation>
     </message>
     <message>
-        <location filename="main.qml" line="118"/>
+        <location filename="main.qml" line="154"/>
         <source>Coordinates</source>
         <translation>Coordinates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="119"/>
+        <location filename="main.qml" line="155"/>
         <source>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</source>
         <oldsource>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude:&lt;/b&gt;</oldsource>
         <translation>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="main.qml" line="120"/>
+        <location filename="main.qml" line="156"/>
         <source>ProviderError</source>
         <translation>Provider Error</translation>
     </message>
     <message>
-        <location filename="main.qml" line="121"/>
+        <location filename="main.qml" line="157"/>
         <source>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</source>
         <translation>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="main.qml" line="167"/>
+        <location filename="main.qml" line="203"/>
         <source>InfoText</source>
         <translation>&lt;a href=&quot;%1member.php?u=%2&quot;&gt;&lt;h1&gt;Forum profile&lt;/h1&gt;&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;%1private.php?do=newpm&amp;u=%2&quot;&gt;&lt;h1&gt;Send private message&lt;/h1&gt;&lt;/a&gt;</translation>
     </message>

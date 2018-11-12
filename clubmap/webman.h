@@ -42,6 +42,7 @@ public:
     void setBox();
     void pushProperties();
 private:
+    QTranslator translator;
     QGeoPositionInfoSource *sourceCurrent;
     QGeoPositionInfoSource *sourceFixed;
     QGeoPositionInfoSource *sourceDefault;

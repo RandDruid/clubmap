@@ -269,7 +269,6 @@ void WebMan::loadSettings()
 void WebMan::installTranslator() {
     qDebug() << "translator: " << m_language;
 
-    QTranslator translator;
     QLocale *locale;
     if (m_language == "auto")
         locale = new QLocale();
@@ -277,6 +276,7 @@ void WebMan::installTranslator() {
         locale = new QLocale(m_language);
     if (translator.load(*locale, QLatin1String("clubmap"), QLatin1String("_"), QLatin1String(":/")))
     {
+        application->removeTranslator(&translator);
         application->installTranslator(&translator);
         engine->retranslate();
     }
@@ -485,7 +485,7 @@ QByteArray WebMan::str2ent(QString str)
 QByteArray WebMan::str2binl(QString str)
 {
     QByteArray bin;
-    byte mask = 0xFF;
+    uint8_t mask = 0xFF;
 
     for(int i = 0; i < str.length(); i += 1)
         bin.append(char(str.at(i).unicode() & mask));

@@ -17,7 +17,7 @@ MainDrawerForm {
     ]
 
     cbSelectLanguage.model: [
-        {"text": qsTr("Auto"), "value": "auto"},
+        {"text": "Auto", "value": "auto"},
         {"text": "English", "value": "en_US"},
         {"text": "Russian", "value": "ru_RU"}
     ]
@@ -100,10 +100,13 @@ MainDrawerForm {
         changePositionSource(switchPositionSourceDefault.checked)
     }
 
+    // --------------------------------------------------------------------------------------- Language select
+
     onSelectedLanguageChanged: {
         for (var i = 0; i < cbSelectLanguage.model.length; i++) {
             if (cbSelectLanguage.model[i].value === selectedLanguage) {
-                cbSelectLanguage.currentIndex = i;
+                if (cbSelectLanguage.currentIndex !== i)
+                    cbSelectLanguage.currentIndex = i;
                 return;
             }
         }
@@ -119,7 +122,10 @@ MainDrawerForm {
         }
     }
 
+    property bool changingIndex: false
     cbSelectLanguage.onCurrentIndexChanged: {
+        if (changingIndex) return;
+        changingIndex = true;
         if ((cbSelectLanguage.currentIndex > -1) && (selectedLanguage.length > 0)) {
         // if (cbSelectLanguage.currentIndex > -1) {
             var lang = cbSelectLanguage.model[cbSelectLanguage.currentIndex].value;
@@ -127,7 +133,10 @@ MainDrawerForm {
                 webMan.setLanguage(lang);
             }
         }
+        changingIndex = false;
     }
+
+    // ---------------------------------------------------------------------------------------
 
     // required for dynamic translations update
     onStrGetTargetsChanged: {

@@ -49,170 +49,85 @@ Item {
     signal changePositionSource(bool online)
     signal changeIcon(int newValue)
 
-    RowLayout {
-        id: mainMenu
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+    ScrollView {
+        anchors.fill: parent
 
-        ColumnLayout {
-            RowLayout {
-                Image {
-                    Layout.alignment: Qt.AlignTop
-                    Layout.maximumWidth: 48
-                    Layout.maximumHeight: 48
-                    source: "qrc:/images/left-arrow.png"
+        RowLayout {
+            id: mainMenu
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-                    MouseArea {
-                        id: buttonBack
-                        anchors.fill: parent
-                    }
-                }
+            ColumnLayout {
+                RowLayout {
+                    Image {
+                        Layout.alignment: Qt.AlignTop
+                        Layout.maximumWidth: 48
+                        Layout.maximumHeight: 48
+                        source: "qrc:/images/left-arrow.png"
 
-                ColumnLayout {
-                    Switch {
-                        id: minimapItem
-                        text: qsTr("Minimap")
-                        leftPadding: 32
-                        bottomPadding: 0
-                        checked: isMiniMap
+                        MouseArea {
+                            id: buttonBack
+                            anchors.fill: parent
+                        }
                     }
 
-                    Switch {
-                        id: followmeItem
-                        text: qsTr("Follow me")
-                        leftPadding: 32
-                        bottomPadding: 0
-                        checked: isFollowMe
-                    }
-                }
-            }
-
-            Switch {
-                id: wantGetTargetsItem
-                padding: 0
-                text: qsTr("Download Club Data")
-                topPadding: 8
-                leftPadding: 8
-                checked: wantGetTargetsBool
-            }
-
-            RowLayout {
-                GroupBox {
-                    padding: 8
                     ColumnLayout {
-                        enabled: wantGetTargetsBool
-
-                        Text {
-                            id: textGetTargets
-                            text: "TIME\nTIME\nTIME"
-                            Layout.fillWidth: false
-                            Layout.alignment: Qt.AlignHCenter
-                            horizontalAlignment: Text.AlignHCenter
+                        Switch {
+                            id: minimapItem
+                            text: qsTr("Minimap")
+                            leftPadding: 32
+                            bottomPadding: 0
+                            checked: isMiniMap
                         }
-                        Dial {
-                            id: dialGetTargets
-                            live: true
-                            stepSize: 10
-                            to: 1200
-                            from: 10
-                            value: wantGetTargetsInt
+
+                        Switch {
+                            id: followmeItem
+                            text: qsTr("Follow me")
+                            leftPadding: 32
+                            bottomPadding: 0
+                            checked: isFollowMe
                         }
                     }
                 }
-                GroupBox {
-                    id: groupBox
-                    Layout.fillWidth: true
-                    padding: 8
-                    Layout.fillHeight: true
-                    ColumnLayout {
-                        anchors.right: parent.right
-                        anchors.rightMargin: 0
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
-                        anchors.top: parent.top
-                        anchors.topMargin: 0
-                        clip: false
-                        Text {
-                            text: qsTr("Login")
-                            Layout.alignment: Qt.AlignLeft
-                        }
-                        TextField {
-                            id: textLogin
-                            text: ""
-                            placeholderText: "login"
-                            Layout.fillWidth: true
-                            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
-                        }
-                        Text {
-                            text: qsTr("Password")
-                            Layout.alignment: Qt.AlignLeft
-                        }
-                        TextField {
-                            id: textPassword
-                            echoMode: TextInput.Password
-                            passwordMaskDelay: 500
-                            placeholderText: "password"
-                            Layout.fillWidth: true
-                        }
-                        Button {
-                            id: buttonCredentials
-                            Layout.fillWidth: true
-                            text: qsTr("Set")
-                        }
-                    }
-                }
-            }
 
-            GroupBox {
-                bottomPadding: 8
-                padding: 8
-                Layout.fillWidth: true
-                topPadding: 42
-                label: Switch {
-                    id: wantSendPositionItem
-                    text: qsTr("Send My Position")
+                Switch {
+                    id: wantGetTargetsItem
+                    padding: 0
+                    text: qsTr("Download Club Data")
                     topPadding: 8
                     leftPadding: 8
-                    padding: 0
-                    checked: wantSendPositionBool
+                    checked: wantGetTargetsBool
                 }
 
                 RowLayout {
-                    anchors.fill: parent
-                    enabled: wantSendPositionBool
+                    GroupBox {
+                        padding: 8
+                        ColumnLayout {
+                            enabled: wantGetTargetsBool
 
-                    ColumnLayout {
-                        Text {
-                            id: textSendPosition
-                            Layout.alignment: Qt.AlignHCenter
-                            text: "TIME\nTIME\nTIME"
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Dial {
-                            id: dialSendPosition
-                            live: true
-                            stepSize: 10
-                            to: 1200
-                            from: 10
-                            value: wantSendPositionInt
+                            Text {
+                                id: textGetTargets
+                                text: "TIME\nTIME\nTIME"
+                                Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignHCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                            Dial {
+                                id: dialGetTargets
+                                live: true
+                                stepSize: 10
+                                to: 1200
+                                from: 10
+                                value: wantGetTargetsInt
+                            }
                         }
                     }
-
                     GroupBox {
-                        id: groupBox1
+                        id: groupBox
                         Layout.fillWidth: true
-                        leftPadding: 12
                         padding: 8
-                        label: Switch {
-                            id: switchPositionSourceDefault
-                            text: qsTr("Auto")
-                            leftPadding: 8
-                            padding: 0
-                            bottomPadding: 0
-                            rightPadding: 0
-                            checked: isPositionLive
-                        }
+                        Layout.fillHeight: true
                         ColumnLayout {
                             anchors.right: parent.right
                             anchors.rightMargin: 0
@@ -220,84 +135,173 @@ Item {
                             anchors.leftMargin: 0
                             anchors.top: parent.top
                             anchors.topMargin: 0
-                            TextField {
-                                id: textPositionLatitude
-                                width: 80
-                                placeholderText: qsTr("Latitude")
-                                text: fixedPositionLatitude
-                                Layout.fillWidth: true
-                                inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            clip: false
+                            Text {
+                                text: qsTr("Login")
+                                Layout.alignment: Qt.AlignLeft
                             }
                             TextField {
-                                id: textPositionLongitude
-                                width: 80
-                                placeholderText: qsTr("Longitude")
-                                text: fixedPositionLongitude
+                                id: textLogin
+                                text: ""
+                                placeholderText: "login"
                                 Layout.fillWidth: true
-                                inputMethodHints: Qt.ImhFormattedNumbersOnly
+                                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
+                            }
+                            Text {
+                                text: qsTr("Password")
+                                Layout.alignment: Qt.AlignLeft
+                            }
+                            TextField {
+                                id: textPassword
+                                echoMode: TextInput.Password
+                                passwordMaskDelay: 500
+                                placeholderText: "password"
+                                Layout.fillWidth: true
                             }
                             Button {
-                                id: buttonFixedPosition
+                                id: buttonCredentials
                                 Layout.fillWidth: true
                                 text: qsTr("Set")
                             }
                         }
                     }
                 }
-            }
 
-            RowLayout {
-                Layout.fillWidth: true
-
-                ComboBox {
-                    id: cbSelectLanguage
-                    textRole: "text"
-                }
-
-                Item {
+                GroupBox {
+                    bottomPadding: 8
+                    padding: 8
                     Layout.fillWidth: true
-                }
-
-                Button {
-                    id: btnAbout
-                    text: qsTr("About")
-                }
-            }
-        }
-
-        GroupBox {
-            title: qsTr("Icon")
-            Layout.fillHeight: true
-            padding: 0
-            width: 42
-            font.bold: false
-
-            Tumbler {
-                id: tumblerIcon
-                width: 40
-                visibleItemCount: 7
-                anchors.fill: parent
-                wheelEnabled: true
-                // 36 + 4
-                enabled: true
-
-                delegate: ItemDelegate {
-                    property int iconIdint: modelData.iconId
-                    anchors.margins: 0
-
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "lightblue"
-                        visible: modelData.iconId === iconId
+                    topPadding: 42
+                    label: Switch {
+                        id: wantSendPositionItem
+                        text: qsTr("Send My Position")
+                        topPadding: 8
+                        leftPadding: 8
+                        padding: 0
+                        checked: wantSendPositionBool
                     }
 
-                    Image {
-                        id: icon
-                        width: 38
-                        height: 38
-                        anchors.centerIn: parent
-                        source: modelData.imageSource
-                        opacity: modelData.iconId === iconId ? 1.0 : 0.6
+                    RowLayout {
+                        anchors.fill: parent
+                        enabled: wantSendPositionBool
+
+                        ColumnLayout {
+                            Text {
+                                id: textSendPosition
+                                Layout.alignment: Qt.AlignHCenter
+                                text: "TIME\nTIME\nTIME"
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                            Dial {
+                                id: dialSendPosition
+                                live: true
+                                stepSize: 10
+                                to: 1200
+                                from: 10
+                                value: wantSendPositionInt
+                            }
+                        }
+
+                        GroupBox {
+                            id: groupBox1
+                            Layout.fillWidth: true
+                            leftPadding: 12
+                            padding: 8
+                            label: Switch {
+                                id: switchPositionSourceDefault
+                                text: qsTr("Auto")
+                                leftPadding: 8
+                                padding: 0
+                                bottomPadding: 0
+                                rightPadding: 0
+                                checked: isPositionLive
+                            }
+                            ColumnLayout {
+                                anchors.right: parent.right
+                                anchors.rightMargin: 0
+                                anchors.left: parent.left
+                                anchors.leftMargin: 0
+                                anchors.top: parent.top
+                                anchors.topMargin: 0
+                                TextField {
+                                    id: textPositionLatitude
+                                    width: 80
+                                    placeholderText: qsTr("Latitude")
+                                    text: fixedPositionLatitude
+                                    Layout.fillWidth: true
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                                }
+                                TextField {
+                                    id: textPositionLongitude
+                                    width: 80
+                                    placeholderText: qsTr("Longitude")
+                                    text: fixedPositionLongitude
+                                    Layout.fillWidth: true
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                                }
+                                Button {
+                                    id: buttonFixedPosition
+                                    Layout.fillWidth: true
+                                    text: qsTr("Set")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    ComboBox {
+                        id: cbSelectLanguage
+                        textRole: "text"
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        id: btnAbout
+                        text: qsTr("About")
+                    }
+                }
+            }
+
+            GroupBox {
+                title: qsTr("Icon")
+                Layout.fillHeight: true
+                padding: 0
+                width: 42
+                font.bold: false
+
+                Tumbler {
+                    id: tumblerIcon
+                    width: 40
+                    visibleItemCount: 7
+                    anchors.fill: parent
+                    wheelEnabled: true
+                    // 36 + 4
+                    enabled: true
+
+                    delegate: ItemDelegate {
+                        property int iconIdint: modelData.iconId
+                        anchors.margins: 0
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: "lightblue"
+                            visible: modelData.iconId === iconId
+                        }
+
+                        Image {
+                            id: icon
+                            width: 38
+                            height: 38
+                            anchors.centerIn: parent
+                            source: modelData.imageSource
+                            opacity: modelData.iconId === iconId ? 1.0 : 0.6
+                        }
                     }
                 }
             }

@@ -14,7 +14,6 @@ ApplicationWindow {
 
     property variant map
     property variant minimap
-    property variant parameters
 
     function roundNumber(number, digits)
     {
@@ -22,13 +21,7 @@ ApplicationWindow {
         return Math.round(number * multiple) / multiple;
     }
 
-    function createMap(provider) {
-        var plugin
-
-        if (parameters && parameters.length > 0)
-            plugin = Qt.createQmlObject ('import QtLocation 5.9; Plugin{ name:"' + provider + '"; parameters: appWindow.parameters}', appWindow)
-        else
-            plugin = Qt.createQmlObject ('import QtLocation 5.9; Plugin{ name:"' + provider + '"}', appWindow)
+    function createMap(pluginName) {
 
         if (minimap) {
             minimap.destroy()
@@ -49,8 +42,14 @@ ApplicationWindow {
             map.destroy()
         }
 
+        //map = mapComponent.createObject(page);
         map = mapComponent;
-        map.plugin = plugin;
+
+        if (pluginName === "osm") {
+            map.plugin = map.pluginOSM;
+        } else if (pluginName === "here") {
+            map.plugin = map.pluginHERE;
+        }
 
         if (zoomLevel != null) {
             map.tilt = tilt
@@ -67,15 +66,9 @@ ApplicationWindow {
         map.forceActiveFocus()
     }
 
-    function initializeProviders(pluginParameters)
+    function initializeProviders(pluginName)
     {
-        var parameters = []
-        for (var prop in pluginParameters){
-            var parameter = Qt.createQmlObject('import QtLocation 5.9; PluginParameter{ name: "'+ prop + '"; value: "' + pluginParameters[prop]+'"}',appWindow)
-            parameters.push(parameter)
-        }
-        appWindow.parameters = parameters
-        createMap("osm");
+        createMap(pluginName);
     }
 
     Component.onCompleted: {
@@ -148,31 +141,6 @@ ApplicationWindow {
 
     }
 
-    MapComponent{
-        id: mapComponent
-
-        property string textCCTitle: qsTr("Coordinates")
-        property string textCCMessage: qsTr("<b>Latitude: %1</b><br/><b>Longitude: %2</b>")
-        property string textECTitle: qsTr("ProviderError")
-        property string textECMessage: qsTr("%1<br/><br/><b>Map provider error</b>")
-
-        width: page.width
-        height: page.height
-        onFollowmeChanged: drawer.isFollowMe = map.followme
-        onCoordinatesCaptured:
-            stackView.showMessage(textCCTitle, textCCMessage.arg(roundNumber(latitude,6)).arg(roundNumber(longitude,6)));
-
-        onErrorChanged: {
-            if (map.error !== Map.NoError) {
-                stackView.showMessage(textECTitle, textECMessage.arg(map.errorString));
-            }
-        }
-        onShowMainMenu: mapPopupMenu.show(coordinate)
-        onShowTargetMenu: targetPopupMenu.show(coordinate)
-
-        onBoxChanged: webMan.setBox(longitudeMin, longitudeMax, latitudeMin, latitudeMax)
-    }
-
     MapPopupMenu {
         id: mapPopupMenu
 
@@ -239,7 +207,7 @@ ApplicationWindow {
     Drawer {
         id: drawer
 
-        width: 350
+        width: 360
         height: appWindow.height
 
         property bool isFollowMe: false;
@@ -343,12 +311,40 @@ ApplicationWindow {
         }
     }
 
+    MapComponent{
+        id: mapComponent
+
+        property string textCCTitle: qsTr("Coordinates")
+        property string textCCMessage: qsTr("<b>Latitude: %1</b><br/><b>Longitude: %2</b>")
+        property string textECTitle: qsTr("ProviderError")
+        property string textECMessage: qsTr("%1<br/><br/><b>Map provider error</b>")
+
+        width: page.width
+        height: page.height
+        onFollowmeChanged: drawer.isFollowMe = map.followme
+        onCoordinatesCaptured:
+            stackView.showMessage(textCCTitle, textCCMessage.arg(roundNumber(latitude,6)).arg(roundNumber(longitude,6)));
+
+        onErrorChanged: {
+            if (map.error !== Map.NoError) {
+                stackView.showMessage(textECTitle, textECMessage.arg(map.errorString));
+            }
+        }
+        onShowMainMenu: mapPopupMenu.show(coordinate)
+        onShowTargetMenu: targetPopupMenu.show(coordinate)
+
+        onBoxChanged: {
+            webMan.setBox(longitudeMin, longitudeMax, latitudeMin, latitudeMax)
+        }
+    }
+
     StackView {
         id: stackView
+        anchors.fill: parent
+
         initialItem: Item {
             id: page
         }
-        anchors.fill: parent
 
         function showMessage(title, message)
         {

@@ -28,10 +28,7 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication application(argc, argv);
 
-    QVariantMap parameters;
     QStringList args(QCoreApplication::arguments());
-
-    parameters[QStringLiteral("osm.useragent")] = QStringLiteral("ClubMap app");
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
@@ -69,7 +66,7 @@ int main(int argc, char *argv[])
 
         if (item != nullptr) {
             QMetaObject::invokeMethod(item, "initializeProviders",
-                                      Q_ARG(QVariant, QVariant::fromValue(parameters)));
+                                      Q_ARG(QVariant, "osm"));
 
             //fps->setPosition("55.75222", "37.61556");
 #ifdef _DEBUG

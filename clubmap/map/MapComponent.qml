@@ -6,6 +6,9 @@ import QtPositioning 5.11
 Map {
     id: map
 
+    property alias pluginHERE: pluginHERE
+    property alias pluginOSM: pluginOSM
+
     property variant markers
     property variant targets
     property variant mapItems
@@ -74,9 +77,9 @@ Map {
         scaleImage.width = (scaleImage.sourceSize.width * f) - 2 * scaleImageLeft.sourceSize.width
         scaleText.text = text
 
-        coord1 = map.toCoordinate(Qt.point(0, 0))
-        coord2 = map.toCoordinate(Qt.point(map.width, map.height))
-        boxChanged(coord1.longitude, coord2.longitude, coord2.latitude, coord1.latitude)
+        // coord1 = map.toCoordinate(Qt.point(0, 0))
+        // coord2 = map.toCoordinate(Qt.point(map.width, map.height))
+        // boxChanged(coord1.longitude, coord2.longitude, coord2.latitude, coord1.latitude)
     }
 
     function deleteMarkers() {
@@ -175,6 +178,18 @@ Map {
         map.markers[index].destroy()
         map.markers = myArray
         if (markers.length === 0) markerCounter = 0
+    }
+
+    Plugin {
+        id: pluginHERE
+        name: "here"
+        PluginParameter { name: "here.app_id"; value: "fFmCoRyhKZssyhhaYEL8" }
+        PluginParameter { name: "here.token"; value: "9RNy9WvlxDuvkxSPYeA9KA" }
+    }
+
+    Plugin {
+        id: pluginOSM
+        name: "osm"
     }
 
     zoomLevel: (maximumZoomLevel - minimumZoomLevel)/2

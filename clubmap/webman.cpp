@@ -18,6 +18,9 @@ WebMan::WebMan(FixedPositionSource *fps, AppSettings *settings, QGuiApplication 
     m_inProgress = false;
     m_statusText1 = "";
     m_statusText2 = "";
+    serverEncoding = FIRST_TRY_ENCODING;
+    loginFailed = false;
+    loginAttempts = 0;
 
 //    m_positionLive = false;
 //    m_icon = 0;
@@ -191,11 +194,12 @@ void WebMan::timerExpired()
         }
     }
 
-    QString s1 = m_wantSendPositionBool ? lastPositionSend > -1 ? QString::number(lastPositionSend) : "*" : "-";
-    QString s2 = m_wantGetTargetsBool ? QString::number(lastTargetsGet) : "-";
-    m_statusText2 = tr("Next Post: %1  Next Get: %2").arg(s1, 4, '0').arg(s2, 4, '0');
-    statusText2Changed(m_statusText2);
+//    QString s1 = m_wantSendPositionBool ? lastPositionSend > -1 ? QString::number(lastPositionSend) : "*" : "-";
+//    QString s2 = m_wantGetTargetsBool ? QString::number(lastTargetsGet) : "-";
+//    m_statusText2 = tr("Next Post: %1  Next Get: %2").arg(s1, 4, '0').arg(s2, 4, '0');
 
+    m_statusText2 = QString::number(lastTargetsGet) + ";" + QString::number(lastPositionSend);
+    statusText2Changed(m_statusText2);
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -313,7 +317,7 @@ void WebMan::startRequest(bool sendPosition, bool getTargets)
             }
         }
 
-        if (needLogin) {
+        if (needLogin && !loginFailed) {
             if (!this->login.isEmpty()) {
                 uq.addQueryItem("do", "login");
                 QString el = this->login;
@@ -328,6 +332,7 @@ void WebMan::startRequest(bool sendPosition, bool getTargets)
                 uq.addQueryItem("vb_login_md5password", this->md5password);
                 uq.addQueryItem("vb_login_md5password_utf", this->md5password_utf);
                 uq.addQueryItem("cookieuser", "1");
+                loginAttempts++;
             } else {
                 m_statusText1 = tr("Please configure Login and Password");
                 statusText1Changed(m_statusText1);
@@ -365,6 +370,7 @@ void WebMan::startRequest(bool sendPosition, bool getTargets)
 
         reply = qnam.get(QNetworkRequest(url));
         connect(reply, &QNetworkReply::finished, this, &WebMan::httpFinished);
+        timer->stop();
     } else {
         m_statusText1 = tr("Network is not available");
         statusText1Changed(m_statusText1);
@@ -382,6 +388,9 @@ void WebMan::setUser(QString login, QString password)
     settings->setValueNVEC("forum/login", this->login);
     settings->setValueNVEC("forum/md5password_utf", this->md5password_utf);
     settings->setValueNVEC("forum/md5password", this->md5password);
+
+    loginFailed = false;
+    loginAttempts = 0;
 }
 
 void WebMan::setBox(double longitudeMin, double longitudeMax, double latitudeMin, double latitudeMax)
@@ -412,58 +421,67 @@ void WebMan::httpFinished()
     m_inProgress = false;
     inProgressChanged(m_inProgress);
 
-    if (reply->error()) {
-        QString nes = reply->errorString();
+    if (reply != nullptr) { // in theory shouldn't happen
 
-        m_statusText1 = nes;
-        statusText1Changed(m_statusText1);
+        if (reply->error()) {
+            QString nes = reply->errorString();
 
-        reply->deleteLater();
-        reply = nullptr;
-        return;
-    }
-
-    const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-
-    if (!redirectionTarget.isNull()) {
-        qDebug() << "Redirect ?!?";
-    }
-
-    QByteArray test = reply->readAll();
-    QString t2 = QTextCodec::codecForName("UTF-8")->toUnicode(test).trimmed();
-    qDebug() << t2;
-    if (!t2.isEmpty()) {
-        if (t2.startsWith("userid")) {
-            m_lastTargetsStr = t2;
-            targetsListChanged(t2);
-
-            m_statusText1 = tr("Connection successfull %1").arg(QTime::currentTime().toString());
+            m_statusText1 = nes;
             statusText1Changed(m_statusText1);
 
         } else {
-            m_statusText1 = tr("Account blocked");
-            statusText1Changed(m_statusText1);
-        }
-    } else {
-        if (!serverEncoding.isEmpty()) {
-            m_statusText1 = tr("Authentication failed");
-            statusText1Changed(m_statusText1);
-        } else {
-            // let's try encode login with server charset
+            const QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+            if (!redirectionTarget.isNull()) {
+                qDebug() << "Redirect ?!?";
+            }
+
+            QString replyEncoding = "UTF-8";
             QVariant ct = reply->header(QNetworkRequest::KnownHeaders::ContentTypeHeader);
             if (ct.isValid()) {
                 QRegularExpression re("charset=([^\\s\\;]*)");
                 QRegularExpressionMatch match = re.match(ct.toString());
                 if (match.isValid()) {
-                    serverEncoding = match.captured(1);
-                    startRequest(true, true);
-                }  else serverEncoding = UNKNOWN;
-            } else serverEncoding = UNKNOWN;
+                    replyEncoding = match.captured(1);
+                }  else replyEncoding = UNKNOWN;
+            } else replyEncoding = UNKNOWN;
+
+            QByteArray test = reply->readAll();
+            QString t2 = QTextCodec::codecForName(replyEncoding.toLatin1())->toUnicode(test).trimmed();
+            qDebug() << t2;
+            if (!t2.isEmpty()) {
+                loginAttempts = 0;
+                if (t2.startsWith("userid")) {
+                    m_lastTargetsStr = t2;
+                    targetsListChanged(t2);
+
+                    m_statusText1 = tr("Connection successful %1").arg(QTime::currentTime().toString());
+                    statusText1Changed(m_statusText1);
+
+                } else {
+                    m_statusText1 = tr("Account blocked");
+                    statusText1Changed(m_statusText1);
+                }
+            } else {
+                if ((loginAttempts > 1) || loginFailed) {
+                    m_statusText1 = tr("Authentication failed");
+                    statusText1Changed(m_statusText1);
+                    loginFailed = true;
+                } else {
+                    // let's try encode login with server charset, second attempt
+                    lastPositionSend = 0;
+                    lastTargetsGet = 2;
+                }
+            }
+
+            serverEncoding = replyEncoding;
         }
+
+        reply->deleteLater();
+        reply = nullptr;
     }
 
-    reply->deleteLater();
-    reply = nullptr;
+    timer->start(1000);
 }
 
 QByteArray WebMan::str2ent(QString str)

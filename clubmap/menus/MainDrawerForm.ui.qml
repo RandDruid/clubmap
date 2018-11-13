@@ -119,7 +119,6 @@ Item {
                                 stepSize: 10
                                 to: 1200
                                 from: 10
-                                value: wantGetTargetsInt
                             }
                         }
                     }
@@ -198,7 +197,6 @@ Item {
                                 stepSize: 10
                                 to: 1200
                                 from: 10
-                                value: wantSendPositionInt
                             }
                         }
 

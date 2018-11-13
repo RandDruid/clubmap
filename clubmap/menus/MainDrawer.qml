@@ -58,7 +58,8 @@ MainDrawerForm {
     // ------------------------------------------------------------------------------------- want send position
 
     onWantSendPositionIntChanged: {
-        textSendPosition.text = formatTime(dialSendPosition.value, strSendPosition);
+        dialSendPosition.value = wantSendPositionInt;
+        textSendPosition.text = formatTime(wantSendPositionInt, strSendPosition);
     }
     wantSendPositionItem.onCheckedChanged: {
         if (wantSendPositionBool !== wantSendPositionItem.checked)
@@ -73,7 +74,8 @@ MainDrawerForm {
     // ------------------------------------------------------------------------------------- want get targets
 
     onWantGetTargetsIntChanged: {
-        textGetTargets.text = formatTime(dialGetTargets.value, strGetTargets);
+        dialGetTargets.value = wantGetTargetsInt;
+        textGetTargets.text = formatTime(wantGetTargetsInt, strGetTargets);
     }
 
     wantGetTargetsItem.onCheckedChanged: {

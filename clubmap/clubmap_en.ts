@@ -171,9 +171,8 @@ interval:
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="menus/TargetPopupMenu.qml" line="15"/>
         <source>Coordinates</source>
-        <translation>Coordinates</translation>
+        <translation type="vanished">Coordinates</translation>
     </message>
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="22"/>
@@ -197,44 +196,49 @@ interval:
     </message>
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="40"/>
-        <source>Google.Maps browser</source>
-        <translation>Google.Maps browser</translation>
+        <source>Google.Maps</source>
+        <oldsource>Google.Maps browser</oldsource>
+        <translation type="unfinished">Google.Maps browser</translation>
     </message>
 </context>
 <context>
     <name>WebMan</name>
     <message>
-        <location filename="webman.cpp" line="332"/>
+        <location filename="webman.cpp" line="333"/>
         <source>Please configure Login and Password</source>
         <translation>Сonfigure Login and Password</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="196"/>
+        <location filename="webman.cpp" line="197"/>
         <source>Next Post: %1  Next Get: %2</source>
         <translation>Next Post: %1  Next Get: %2</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="363"/>
+        <location filename="webman.cpp" line="364"/>
         <source>Communicating with server...</source>
         <translation>Communicating with server...</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="369"/>
+        <location filename="webman.cpp" line="370"/>
         <source>Network is not available</source>
         <translation>Network is not available</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="440"/>
-        <source>Connection successfull %1</source>
-        <translation>Connection successfull %1</translation>
+        <location filename="webman.cpp" line="452"/>
+        <source>Connection successful %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="444"/>
+        <source>Connection successfull %1</source>
+        <translation type="vanished">Connection successfull %1</translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="456"/>
         <source>Account blocked</source>
         <translation>Account blocked</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="449"/>
+        <location filename="webman.cpp" line="461"/>
         <source>Authentication failed</source>
         <translation>Authentication failed</translation>
     </message>
@@ -247,23 +251,23 @@ interval:
         <translation>ClubMap</translation>
     </message>
     <message>
-        <location filename="main.qml" line="346"/>
+        <location filename="main.qml" line="354"/>
         <source>Coordinates</source>
         <translation>Coordinates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="347"/>
+        <location filename="main.qml" line="355"/>
         <source>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</source>
         <oldsource>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude:&lt;/b&gt;</oldsource>
         <translation>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="main.qml" line="348"/>
+        <location filename="main.qml" line="356"/>
         <source>ProviderError</source>
         <translation>Provider Error</translation>
     </message>
     <message>
-        <location filename="main.qml" line="349"/>
+        <location filename="main.qml" line="357"/>
         <source>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</source>
         <translation>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</translation>
     </message>

@@ -37,7 +37,7 @@ Menu {
         }
 
         Action {
-            text: qsTr("Google.Maps browser")
+            text: qsTr("Google.Maps")
             onTriggered: itemClicked("googleMapsBrowser")
         }
     }

@@ -18,6 +18,7 @@
 #define URL_BASE "https://forester.club/"
 #define URL_PAGE "position.php"
 #define UNKNOWN "unknown"
+#define FIRST_TRY_ENCODING "windows-1251"
 
 class WebMan : public QObject
 {
@@ -61,6 +62,8 @@ private:
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
     QString serverEncoding;
+    bool loginFailed;
+    int loginAttempts;
 
     AppSettings *settings;
     QGuiApplication *application;

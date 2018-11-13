@@ -16,8 +16,8 @@ MapQuickItem {
 
     sourceItem: Image {
         id: image
-        width: 24
-        height: 24
+        width: 30
+        height: 30
         source: "../images/ticon" + icon + ".png"
         opacity: targetMouseArea.pressed ? 0.6 : 1.0
         MouseArea  {

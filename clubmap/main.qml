@@ -121,11 +121,33 @@ ApplicationWindow {
 
                 Label {
                     text: webMan.statusText1
-                    // font.family: "Courier"
                 }
-                Label {
-                    text: webMan.statusText2
-                    // font.family: "Courier"
+//                Label {
+//                    text: webMan.statusText2
+//                }
+                RowLayout {
+                    ProgressBar {
+                        from: 0
+                        to: webMan.wantGetTargetsInt
+                        value: webMan.wantGetTargetsBool ? (webMan.wantGetTargetsInt - webMan.statusText2.split(';')[0]) : 0
+
+                        Rectangle {
+                            anchors.fill: parent
+                            visible: !webMan.wantGetTargetsBool
+                            color: "red"
+                        }
+                    }
+                    ProgressBar {
+                        from: 0
+                        to: webMan.wantSendPositionInt
+                        value: webMan.wantSendPositionBool ? (webMan.wantSendPositionInt - webMan.statusText2.split(';')[1]) : 0
+
+                        Rectangle {
+                            anchors.fill: parent
+                            visible: !webMan.wantSendPositionBool
+                            color: "red"
+                        }
+                    }
                 }
             }
 

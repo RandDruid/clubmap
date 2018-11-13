@@ -171,9 +171,8 @@ interval:
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="menus/TargetPopupMenu.qml" line="15"/>
         <source>Coordinates</source>
-        <translation>Координаты</translation>
+        <translation type="vanished">Координаты</translation>
     </message>
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="22"/>
@@ -183,58 +182,63 @@ interval:
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="25"/>
         <source>Yandex.Maps browser</source>
-        <translation>Яндекс.Карты броузер</translation>
+        <translation>Я.Карты броузер</translation>
     </message>
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="30"/>
         <source>Yandex.Maps app</source>
-        <translation>Яндекс.Карты приложение</translation>
+        <translation>Я.Карты приложение</translation>
     </message>
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="35"/>
         <source>Yandex.Navi app</source>
-        <translation>Яндекс.Навигатор приложение</translation>
+        <translation>Я.Навигатор приложение</translation>
     </message>
     <message>
         <location filename="menus/TargetPopupMenu.qml" line="40"/>
-        <source>Google.Maps browser</source>
-        <translation>Гугл.Карты броузер</translation>
+        <source>Google.Maps</source>
+        <oldsource>Google.Maps browser</oldsource>
+        <translation type="unfinished">Гугл.Карты броузер</translation>
     </message>
 </context>
 <context>
     <name>WebMan</name>
     <message>
-        <location filename="webman.cpp" line="332"/>
+        <location filename="webman.cpp" line="333"/>
         <source>Please configure Login and Password</source>
         <translation>Настройте Логи и Пароль</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="196"/>
+        <location filename="webman.cpp" line="197"/>
         <source>Next Post: %1  Next Get: %2</source>
         <translation>До посылки: %1  загрузки: %2</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="363"/>
+        <location filename="webman.cpp" line="364"/>
         <source>Communicating with server...</source>
         <translation>Связь с сервером...</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="369"/>
+        <location filename="webman.cpp" line="370"/>
         <source>Network is not available</source>
         <translation>Сеть не доступна</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="440"/>
-        <source>Connection successfull %1</source>
-        <translation>Поседний сеанс %1</translation>
+        <location filename="webman.cpp" line="452"/>
+        <source>Connection successful %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="444"/>
+        <source>Connection successfull %1</source>
+        <translation type="vanished">Поседний сеанс %1</translation>
+    </message>
+    <message>
+        <location filename="webman.cpp" line="456"/>
         <source>Account blocked</source>
         <translation>Ошибка аккаунта</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="449"/>
+        <location filename="webman.cpp" line="461"/>
         <source>Authentication failed</source>
         <translation>Ошибка аутентификации</translation>
     </message>
@@ -247,23 +251,23 @@ interval:
         <translation>КлубнаяКарта</translation>
     </message>
     <message>
-        <location filename="main.qml" line="346"/>
+        <location filename="main.qml" line="354"/>
         <source>Coordinates</source>
         <translation>Координаты</translation>
     </message>
     <message>
-        <location filename="main.qml" line="347"/>
+        <location filename="main.qml" line="355"/>
         <source>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</source>
         <oldsource>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude:&lt;/b&gt;</oldsource>
         <translation>&lt;b&gt;Широта: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Долгота: %2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="main.qml" line="348"/>
+        <location filename="main.qml" line="356"/>
         <source>ProviderError</source>
         <translation>Ошибка провайдера</translation>
     </message>
     <message>
-        <location filename="main.qml" line="349"/>
+        <location filename="main.qml" line="357"/>
         <source>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</source>
         <translation>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Ошибка провайдера карт&lt;/b&gt;</translation>
     </message>

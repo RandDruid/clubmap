@@ -17,6 +17,7 @@
 
 #define URL_BASE "https://forester.club/"
 #define URL_PAGE "position.php"
+#define UNKNOWN "unknown"
 
 class WebMan : public QObject
 {
@@ -59,6 +60,7 @@ private:
     QUrl url;
     QNetworkAccessManager qnam;
     QNetworkReply *reply;
+    QString serverEncoding;
 
     AppSettings *settings;
     QGuiApplication *application;

@@ -11,9 +11,35 @@ Menu {
         onTriggered: itemClicked("getTargetInfo")
     }
 
-    Action {
-        text: qsTr("Coordinates")
-        onTriggered: itemClicked("getTargetCoordinate")
+//    Action {
+//        text: qsTr("Coordinates")
+//        onTriggered: itemClicked("getTargetCoordinate")
+//    }
+
+    MenuSeparator { }
+
+    Menu {
+        title: qsTr("Navigation") + "..."
+
+        Action {
+            text: qsTr("Yandex.Maps browser")
+            onTriggered: itemClicked("yandexMapsBrowser")
+        }
+
+        Action {
+            text: qsTr("Yandex.Maps app")
+            onTriggered: itemClicked("yandexMapsApp")
+        }
+
+        Action {
+            text: qsTr("Yandex.Navi app")
+            onTriggered: itemClicked("yandexNaviApp")
+        }
+
+        Action {
+            text: qsTr("Google.Maps browser")
+            onTriggered: itemClicked("googleMapsBrowser")
+        }
     }
 
     function update() {

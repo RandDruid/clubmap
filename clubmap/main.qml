@@ -179,14 +179,51 @@ ApplicationWindow {
 
         onItemClicked: {
             stackView.pop(page)
+            var coord1 = webMan.coordinate;
+            var coord2 = map.targets[map.currentTarget].coordinate;
+            var url;
             switch (item) {
                 case "getTargetInfo":
                     stackView.showMessage(
                                 map.targets[map.currentTarget].title,
-                                textInfo.arg(forumBaseUrl).arg(map.targets[map.currentTarget].userid));
+                                textInfo
+                                    .arg(forumBaseUrl)
+                                    .arg(map.targets[map.currentTarget].userid)
+                                    .arg(coord2.latitude)
+                                    .arg(coord2.longitude),
+                                "%1mobiquo/avatar.php?user_id=%2"
+                                    .arg(forumBaseUrl)
+                                    .arg(map.targets[map.currentTarget].userid)
+                                );
                     break;
                 case "getTargetCoordinate":
-                    map.coordinatesCaptured(map.targets[map.currentTarget].coordinate.latitude, map.targets[map.currentTarget].coordinate.longitude)
+                    map.coordinatesCaptured(coord2.latitude, coord2.longitude)
+                    break;
+                case "yandexMapsBrowser":
+                    url = "https://maps.yandex.ru/?rtext=" +
+                            roundNumber(coord1.latitude, 6) + "," + roundNumber(coord1.longitude, 6) + "~" +
+                            roundNumber(coord2.latitude, 6) + "," + roundNumber(coord2.longitude, 6) +
+                            "&rtt=auto"
+                    Qt.openUrlExternally(url);
+                    break;
+                case "yandexMapsApp":
+                    url = "yandexmaps://maps.yandex.ru/?rtext=" +
+                            roundNumber(coord1.latitude, 6) + "," + roundNumber(coord1.longitude, 6) + "~" +
+                            roundNumber(coord2.latitude, 6) + "," + roundNumber(coord2.longitude, 6) +
+                            "&rtt=auto"
+                    Qt.openUrlExternally(url);
+                    break;
+                case "yandexNaviApp":
+                    url = "yandexnavi://build_route_on_map?" +
+                    //        "lat_from=" + roundNumber(coord1.latitude, 6) + "&long_from=" + roundNumber(coord1.longitude, 6) + "&" +
+                            "lat_to=" + roundNumber(coord2.latitude, 6) + "&long_to=" + roundNumber(coord2.longitude, 6)
+                    Qt.openUrlExternally(url);
+                    break;
+                case "googleMapsBrowser":
+                    url = "https://www.google.com/maps/dir/?api=1&origin=" +
+                            roundNumber(coord1.latitude, 6) + "," + roundNumber(coord1.longitude, 6) + "&destination=" +
+                            roundNumber(coord2.latitude, 6) + "," + roundNumber(coord2.longitude, 6)
+                    Qt.openUrlExternally(url);
                     break;
                 default:
                     console.log("Unsupported operation")
@@ -346,9 +383,9 @@ ApplicationWindow {
             id: page
         }
 
-        function showMessage(title, message)
+        function showMessage(title, message, imageUrl)
         {
-            push(messageForm, { "title" : title, "message" : message })
+            push(messageForm, { "title" : title, "message" : message, "imageUrl": imageUrl })
         }
 
         function closeMessage(backPage)

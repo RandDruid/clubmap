@@ -7,6 +7,7 @@ Item {
 
     property string title
     property string message
+    property string imageUrl
 
     Rectangle {
         anchors.fill: parent
@@ -24,6 +25,13 @@ Item {
             id: columnLayout1
             spacing: 20
             anchors.fill: parent
+
+            Image {
+                id: messageImage
+                Layout.alignment: Qt.AlignHCenter
+                source: imageUrl
+                visible: imageUrl
+            }
 
             Label {
                 id: messageText

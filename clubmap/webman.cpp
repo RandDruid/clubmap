@@ -316,7 +316,14 @@ void WebMan::startRequest(bool sendPosition, bool getTargets)
         if (needLogin) {
             if (!this->login.isEmpty()) {
                 uq.addQueryItem("do", "login");
-                uq.addQueryItem("vb_login_username", this->login);
+                QString el = this->login;
+                if (!serverEncoding.isEmpty() && (serverEncoding != UNKNOWN)) {
+                    QTextCodec *codec = QTextCodec::codecForName(serverEncoding.toLatin1());
+                    if (codec != nullptr) {
+                        el = codec->fromUnicode(this->login).toPercentEncoding();
+                    }
+                }
+                uq.addQueryItem("vb_login_username", el);
                 uq.addQueryItem("vb_login_password", "");
                 uq.addQueryItem("vb_login_md5password", this->md5password);
                 uq.addQueryItem("vb_login_md5password_utf", this->md5password_utf);
@@ -438,8 +445,21 @@ void WebMan::httpFinished()
             statusText1Changed(m_statusText1);
         }
     } else {
-        m_statusText1 = tr("Authentication failed");
-        statusText1Changed(m_statusText1);
+        if (!serverEncoding.isEmpty()) {
+            m_statusText1 = tr("Authentication failed");
+            statusText1Changed(m_statusText1);
+        } else {
+            // let's try encode login with server charset
+            QVariant ct = reply->header(QNetworkRequest::KnownHeaders::ContentTypeHeader);
+            if (ct.isValid()) {
+                QRegularExpression re("charset=([^\\s\\;]*)");
+                QRegularExpressionMatch match = re.match(ct.toString());
+                if (match.isValid()) {
+                    serverEncoding = match.captured(1);
+                    startRequest(true, true);
+                }  else serverEncoding = UNKNOWN;
+            } else serverEncoding = UNKNOWN;
+        }
     }
 
     reply->deleteLater();

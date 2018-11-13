@@ -175,41 +175,66 @@ interval:
         <source>Coordinates</source>
         <translation>Coordinates</translation>
     </message>
+    <message>
+        <location filename="menus/TargetPopupMenu.qml" line="22"/>
+        <source>Navigation</source>
+        <translation>Navigation</translation>
+    </message>
+    <message>
+        <location filename="menus/TargetPopupMenu.qml" line="25"/>
+        <source>Yandex.Maps browser</source>
+        <translation>Yandex.Maps browser</translation>
+    </message>
+    <message>
+        <location filename="menus/TargetPopupMenu.qml" line="30"/>
+        <source>Yandex.Maps app</source>
+        <translation>Yandex.Maps app</translation>
+    </message>
+    <message>
+        <location filename="menus/TargetPopupMenu.qml" line="35"/>
+        <source>Yandex.Navi app</source>
+        <translation>Yandex.Navi app</translation>
+    </message>
+    <message>
+        <location filename="menus/TargetPopupMenu.qml" line="40"/>
+        <source>Google.Maps browser</source>
+        <translation>Google.Maps browser</translation>
+    </message>
 </context>
 <context>
     <name>WebMan</name>
     <message>
-        <location filename="webman.cpp" line="326"/>
+        <location filename="webman.cpp" line="332"/>
         <source>Please configure Login and Password</source>
         <translation>Сonfigure Login and Password</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="197"/>
+        <location filename="webman.cpp" line="196"/>
         <source>Next Post: %1  Next Get: %2</source>
         <translation>Next Post: %1  Next Get: %2</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="357"/>
+        <location filename="webman.cpp" line="363"/>
         <source>Communicating with server...</source>
         <translation>Communicating with server...</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="363"/>
+        <location filename="webman.cpp" line="369"/>
         <source>Network is not available</source>
         <translation>Network is not available</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="434"/>
+        <location filename="webman.cpp" line="440"/>
         <source>Connection successfull %1</source>
         <translation>Connection successfull %1</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="438"/>
+        <location filename="webman.cpp" line="444"/>
         <source>Account blocked</source>
         <translation>Account blocked</translation>
     </message>
     <message>
-        <location filename="webman.cpp" line="442"/>
+        <location filename="webman.cpp" line="449"/>
         <source>Authentication failed</source>
         <translation>Authentication failed</translation>
     </message>
@@ -222,30 +247,30 @@ interval:
         <translation>ClubMap</translation>
     </message>
     <message>
-        <location filename="main.qml" line="317"/>
+        <location filename="main.qml" line="346"/>
         <source>Coordinates</source>
         <translation>Coordinates</translation>
     </message>
     <message>
-        <location filename="main.qml" line="318"/>
+        <location filename="main.qml" line="347"/>
         <source>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</source>
         <oldsource>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude:&lt;/b&gt;</oldsource>
         <translation>&lt;b&gt;Latitude: %1&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="main.qml" line="319"/>
+        <location filename="main.qml" line="348"/>
         <source>ProviderError</source>
         <translation>Provider Error</translation>
     </message>
     <message>
-        <location filename="main.qml" line="320"/>
+        <location filename="main.qml" line="349"/>
         <source>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</source>
         <translation>%1&lt;br/&gt;&lt;br/&gt;&lt;b&gt;Map provider error&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="main.qml" line="171"/>
         <source>InfoText</source>
-        <translation>&lt;a href=&quot;%1member.php?u=%2&quot;&gt;&lt;h1&gt;Forum profile&lt;/h1&gt;&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;%1private.php?do=newpm&amp;u=%2&quot;&gt;&lt;h1&gt;Send private message&lt;/h1&gt;&lt;/a&gt;</translation>
+        <translation>&lt;b&gt;Latitude: %3&lt;/b&gt;&lt;br/&gt;&lt;b&gt;Longitude: %4&lt;/b&gt;&lt;br/&gt;&lt;a href=&quot;%1member.php?u=%2&quot;&gt;&lt;h1&gt;Forum profile&lt;/h1&gt;&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;%1private.php?do=newpm&amp;u=%2&quot;&gt;&lt;h1&gt;Send private message&lt;/h1&gt;&lt;/a&gt;</translation>
     </message>
 </context>
 </TS>

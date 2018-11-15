@@ -22,6 +22,11 @@ MainDrawerForm {
         {"text": "Russian", "value": "ru_RU"}
     ]
 
+    cbSelectMapType.model: [
+        {"text": "Open Street Map", "value": "osm"},
+        {"text": "HERE Maps", "value": "here"}
+    ]
+
     property string strGetTargets: qsTr("Refresh\nevery:\n")
     property string strSendPosition: qsTr("Minimum\ninterval:\n")
 
@@ -102,6 +107,28 @@ MainDrawerForm {
         changePositionSource(switchPositionSourceDefault.checked)
     }
 
+    // --------------------------------------------------------------------------------------- MapType select
+
+    onSelectedMapTypeChanged: {
+        for (var i = 0; i < cbSelectMapType.model.length; i++) {
+            if (cbSelectMapType.model[i].value === selectedMapType) {
+//                if (cbSelectMapType.currentIndex !== i)
+                cbSelectMapType.currentIndex = i;
+                recreateMap(selectedMapType);
+                return;
+            }
+        }
+    }
+
+    cbSelectMapType.onCurrentIndexChanged: {
+        if ((cbSelectMapType.currentIndex > -1) && (selectedMapType.length > 0)) {
+            var lang = cbSelectMapType.model[cbSelectMapType.currentIndex].value;
+            if (lang !== selectedMapType) {
+                webMan.setMapType(lang);
+            }
+        }
+    }
+
     // --------------------------------------------------------------------------------------- Language select
 
     onSelectedLanguageChanged: {
@@ -157,7 +184,8 @@ MainDrawerForm {
 
     function load() {
         textLogin.text = settings.valueNVEC("forum/login", "");
-        textPassword.text = settings.valueNVEC("forum/md5password", "");
+        var s = settings.valueNVEC("forum/md5password", "");
+        if (s.length > 0) textPassword.text = "*******"
         webMan.loadSettings();
     }
 

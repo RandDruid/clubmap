@@ -42,8 +42,8 @@ ApplicationWindow {
             map.destroy()
         }
 
-        //map = mapComponent.createObject(page);
-        map = mapComponent;
+        map = mapComponent.createObject(page);
+        // map = mapComponent;
 
         if (pluginName === "osm") {
             map.plugin = map.pluginOSM;
@@ -328,6 +328,7 @@ ApplicationWindow {
             fixedPositionLongitude: fixedPositionSource.longitude
             iconId: webMan.iconId
             selectedLanguage: webMan.language
+            selectedMapType: webMan.mapType
 
             onChangeWantSendPositionInt: {
                 webMan.changeWantSendPositionInt(newValue);
@@ -358,6 +359,10 @@ ApplicationWindow {
                 webMan.changeIcon(newValue);
             }
 
+            onRecreateMap: {
+                createMap(mapType);
+            }
+
             onMenuTriggered: {
                 switch (item) {
                     case "minimap": stackView.pop(page); drawer.toggleMiniMapState(); drawer.close(); break;
@@ -370,30 +375,33 @@ ApplicationWindow {
         }
     }
 
-    MapComponent{
+    Component {
         id: mapComponent
 
-        property string textCCTitle: qsTr("Coordinates")
-        property string textCCMessage: qsTr("<b>Latitude: %1</b><br/><b>Longitude: %2</b>")
-        property string textECTitle: qsTr("ProviderError")
-        property string textECMessage: qsTr("%1<br/><br/><b>Map provider error</b>")
+        MapComponent{
 
-        width: page.width
-        height: page.height
-        onFollowmeChanged: drawer.isFollowMe = map.followme
-        onCoordinatesCaptured:
-            stackView.showMessage(textCCTitle, textCCMessage.arg(roundNumber(latitude,6)).arg(roundNumber(longitude,6)));
+            property string textCCTitle: qsTr("Coordinates")
+            property string textCCMessage: qsTr("<b>Latitude: %1</b><br/><b>Longitude: %2</b>")
+            property string textECTitle: qsTr("ProviderError")
+            property string textECMessage: qsTr("%1<br/><br/><b>Map provider error</b>")
 
-        onErrorChanged: {
-            if (map.error !== Map.NoError) {
-                stackView.showMessage(textECTitle, textECMessage.arg(map.errorString));
+            width: page.width
+            height: page.height
+            onFollowmeChanged: drawer.isFollowMe = map.followme
+            onCoordinatesCaptured:
+                stackView.showMessage(textCCTitle, textCCMessage.arg(roundNumber(latitude,6)).arg(roundNumber(longitude,6)));
+
+            onErrorChanged: {
+                if (map.error !== Map.NoError) {
+                    stackView.showMessage(textECTitle, textECMessage.arg(map.errorString));
+                }
             }
-        }
-        onShowMainMenu: mapPopupMenu.show(coordinate)
-        onShowTargetMenu: targetPopupMenu.show(coordinate)
+            onShowMainMenu: mapPopupMenu.show(coordinate)
+            onShowTargetMenu: targetPopupMenu.show(coordinate)
 
-        onBoxChanged: {
-            webMan.setBox(longitudeMin, longitudeMax, latitudeMin, latitudeMax)
+            onBoxChanged: {
+                webMan.setBox(longitudeMin, longitudeMax, latitudeMin, latitudeMax)
+            }
         }
     }
 

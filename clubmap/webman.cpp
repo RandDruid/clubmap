@@ -261,11 +261,25 @@ void WebMan::loadSettings()
     m_positionLive = settings->valueNV("local/positionSourceDefault", "True").toBool();
     changePositionSource(m_positionLive);
 
+    m_mapType = settings->valueNV("local/mapType", "osm").toString();
+    mapTypeChanged(m_mapType);
     m_language = settings->valueNV("local/language", "auto").toString();
     languageChanged(m_language);
     QTimer::singleShot(200, this, SLOT(installTranslator()));
 
     settingsRead = true;
+}
+
+//-------------------------------------------------------------------------------------------------------------
+
+void WebMan::setMapType(QString mapType) {
+    if (settingsRead) {
+
+        m_mapType = mapType;
+        mapTypeChanged(m_language);
+
+        settings->setValueNV("local/mapType", m_mapType);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------

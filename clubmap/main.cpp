@@ -65,8 +65,8 @@ int main(int argc, char *argv[])
         Q_ASSERT(item);
 
         if (item != nullptr) {
-            QMetaObject::invokeMethod(item, "initializeProviders",
-                                      Q_ARG(QVariant, "osm"));
+//            QMetaObject::invokeMethod(item, "initializeProviders",
+//                                      Q_ARG(QVariant, "osm"));
 
             //fps->setPosition("55.75222", "37.61556");
 #ifdef _DEBUG

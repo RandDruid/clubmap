@@ -35,5 +35,6 @@
         <file>menus/TargetPopupMenu.qml</file>
         <file>forms/AboutForm.ui.qml</file>
         <file>images/logo.ico</file>
+        <file>menus/ExpanderCheckBox.qml</file>
     </qresource>
 </RCC>

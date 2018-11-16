@@ -61,7 +61,7 @@ Item {
         anchors.top: parent.top
 
         ColumnLayout {
-            anchors.rightMargin: 50
+            anchors.rightMargin: 60
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.right: parent.right
@@ -312,6 +312,7 @@ Item {
 
                 Text {
                     text: qsTr("Map Type")
+                    leftPadding: 8
                     Layout.minimumWidth: 90
                     font.pointSize: 11
                 }
@@ -328,6 +329,7 @@ Item {
 
                 Text {
                     text: qsTr("Language")
+                    leftPadding: 8
                     Layout.minimumWidth: 90
                     font.pointSize: 11
                 }
@@ -349,7 +351,7 @@ Item {
 
         GroupBox {
             id: gbIcon
-            width: 48
+            width: 58
             height: scrollRoot.height
             anchors.top: parent.top
             anchors.right: parent.right
@@ -361,7 +363,7 @@ Item {
 
             Tumbler {
                 id: tumblerIcon
-                width: 40
+                width: 50
                 visibleItemCount: 7
                 anchors.fill: parent
                 wheelEnabled: true
@@ -380,8 +382,8 @@ Item {
 
                     Image {
                         id: icon
-                        width: 38
-                        height: 38
+                        width: 48
+                        height: 48
                         anchors.centerIn: parent
                         source: modelData.imageSource
                         opacity: modelData.iconId === iconId ? 1.0 : 0.6

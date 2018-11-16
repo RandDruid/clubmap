@@ -12,11 +12,11 @@
         <location filename="forms/AboutForm.ui.qml" line="39"/>
         <source>AboutText</source>
         <translation>&lt;h1&gt;ClubMap&lt;/h1&gt;
-&lt;br&gt;Software project to collect and share position information between forum members.
-&lt;br&gt;&lt;b&gt;ClubMap&lt;/b&gt; is licensed under LGPLv3.
-&lt;br&gt;Source code can be found at &lt;a href=&quot;https://github.com/RandDruid/ClubMap&quot;&gt;GitHub&lt;/a&gt;
-&lt;br&gt;Author: Andrey Ludwig (aka Rand)
-&lt;br&gt;Contributors: (are welcome :)</translation>
+&lt;br/&gt;&lt;br/&gt;Software project to collect and share position information between forum members.
+&lt;br/&gt;&lt;br/&gt;&lt;b&gt;ClubMap&lt;/b&gt; is licensed under LGPLv3.
+&lt;br/&gt;&lt;br/&gt;Source code can be found at &lt;a href=&quot;https://github.com/RandDruid/ClubMap&quot;&gt;GitHub&lt;/a&gt;
+&lt;br/&gt;&lt;br/&gt;Author: Andrey Ludwig (aka Rand)
+&lt;br/&gt;&lt;br/&gt;Contributors: (are welcome :)</translation>
     </message>
     <message>
         <location filename="forms/AboutForm.ui.qml" line="21"/>
@@ -74,8 +74,9 @@ interval:
         <translation>Follow me</translation>
     </message>
     <message>
+        <location filename="menus/MainDrawerForm.ui.qml" line="162"/>
         <source>Download Club Data</source>
-        <translation type="vanished">Download club data</translation>
+        <translation>Download club data</translation>
     </message>
     <message>
         <location filename="menus/MainDrawerForm.ui.qml" line="105"/>
@@ -126,17 +127,17 @@ interval:
         <translation>Map Type</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="330"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="331"/>
         <source>Language</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="344"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="346"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="358"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="360"/>
         <source>Icon</source>
         <translation>Icon</translation>
     </message>

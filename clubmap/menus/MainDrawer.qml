@@ -93,18 +93,25 @@ MainDrawerForm {
         textGetTargets.text = formatTime(dialGetTargets.value, strGetTargets);
     }
 
-    // ---------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------- position source
 
     buttonFixedPosition.onPressed: {
         changeFixedPosition(textPositionLatitude.text, textPositionLongitude.text)
     }
 
-    buttonCredentials.onPressed: {
-        webMan.setUser(textLogin.text, textPassword.text);
-    }
-
     switchPositionSourceDefault.onCheckedChanged: {
         changePositionSource(switchPositionSourceDefault.checked)
+    }
+
+    // --------------------------------------------------------------------------------------- forum credentials
+
+    onLoginChanged: {
+        textLogin.text = login;
+        textPassword.text = "*****";
+    }
+
+    buttonCredentials.onPressed: {
+        webMan.setUser(textLogin.text, textPassword.text);
     }
 
     // --------------------------------------------------------------------------------------- MapType select
@@ -183,9 +190,6 @@ MainDrawerForm {
     }
 
     function load() {
-        textLogin.text = settings.valueNVEC("forum/login", "");
-        var s = settings.valueNVEC("forum/md5password", "");
-        if (s.length > 0) textPassword.text = "*******"
         webMan.loadSettings();
     }
 

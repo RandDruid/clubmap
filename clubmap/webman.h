@@ -40,6 +40,7 @@ public:
     Q_PROPERTY(QString statusText2 MEMBER m_statusText2 NOTIFY statusText2Changed)
     Q_PROPERTY(QString language MEMBER m_language NOTIFY languageChanged)
     Q_PROPERTY(QString mapType MEMBER m_mapType NOTIFY mapTypeChanged)
+    Q_PROPERTY(QString login MEMBER login NOTIFY loginChanged)
 
     void startRequest(bool sendPosition, bool getTargets);
     void setBox();
@@ -113,6 +114,7 @@ signals:
     void statusText2Changed(QString newValue);
     void languageChanged(QString newValue);
     void mapTypeChanged(QString newValue);
+    void loginChanged(QString newValue);
 
 public slots:
     void changeWantSendPositionInt(int newValue);
@@ -123,6 +125,7 @@ public slots:
     void changeIcon(int newValue);
     void setUser(QString login, QString password);
     void loadSettings();
+    void saveSettings();
     void setMapType(QString mapType);
     void setLanguage(QString localeName);
     void setBox(double longitudeMin, double longitudeMax, double latitudeMin, double latitudeMax);

@@ -279,6 +279,7 @@ ApplicationWindow {
 
         onClosed: {
             mainDrawer.save();
+            webMan.saveSettings();
         }
 
         function finishCreation() {
@@ -329,6 +330,7 @@ ApplicationWindow {
             iconId: webMan.iconId
             selectedLanguage: webMan.language
             selectedMapType: webMan.mapType
+
 
             onChangeWantSendPositionInt: {
                 webMan.changeWantSendPositionInt(newValue);

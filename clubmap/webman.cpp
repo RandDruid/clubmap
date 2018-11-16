@@ -95,8 +95,6 @@ void WebMan::changePositionSource(bool online)
 
         lastPositionSend = sourceCurrent->minimumUpdateInterval() / 1000 + 1;
         lastTargetsGet = lastPositionSend + 1;
-
-        settings->setValueNV("local/positionSourceDefault", online ? "True" : "False");
     }
 }
 
@@ -108,8 +106,6 @@ void WebMan::changeWantGetTargetsInt(int newValue)
         m_wantGetTargetsInt = newValue;
         wantGetTargetsIntChanged(m_wantGetTargetsInt);
         lastTargetsGet = 0;
-
-        settings->setValueNV("local/wantGetTargetsInt", m_wantGetTargetsInt);
     }
 }
 
@@ -119,8 +115,6 @@ void WebMan::changeWantGetTargetsBool(bool newValue)
         m_wantGetTargetsBool = newValue;
         wantGetTargetsBoolChanged(m_wantGetTargetsBool);
         lastTargetsGet = 0;
-
-        settings->setValueNV("local/wantGetTargetsBool", m_wantGetTargetsBool);
     }
 }
 
@@ -129,8 +123,6 @@ void WebMan::changeIcon(int newValue)
     if (settingsRead) {
         m_icon = newValue;
         iconIdChanged(m_icon);
-
-        settings->setValueNV("local/iconid", m_icon);
     }
 }
 
@@ -140,8 +132,6 @@ void WebMan::changeWantSendPositionInt(int newValue)
         m_wantSendPositionInt = newValue;
         wantSendPositionIntChanged(m_wantSendPositionInt);
         lastPositionSend = 0;
-
-        settings->setValueNV("local/wantSendPositionInt", m_wantSendPositionInt);
     }
 }
 
@@ -151,8 +141,6 @@ void WebMan::changeWantSendPositionBool(bool newValue)
         m_wantSendPositionBool = newValue;
         wantSendPositionBoolChanged(m_wantSendPositionBool);
         lastPositionSend = 0;
-
-        settings->setValueNV("local/wantSendPositionBool", m_wantSendPositionBool ? "True" : "False");
     }
 }
 
@@ -194,10 +182,6 @@ void WebMan::timerExpired()
         }
     }
 
-//    QString s1 = m_wantSendPositionBool ? lastPositionSend > -1 ? QString::number(lastPositionSend) : "*" : "-";
-//    QString s2 = m_wantGetTargetsBool ? QString::number(lastTargetsGet) : "-";
-//    m_statusText2 = tr("Next Post: %1  Next Get: %2").arg(s1, 4, '0').arg(s2, 4, '0');
-
     m_statusText2 = QString::number(lastTargetsGet) + ";" + QString::number(lastPositionSend);
     statusText2Changed(m_statusText2);
 }
@@ -237,13 +221,22 @@ void WebMan::positionUpdated(const QGeoPositionInfo &pos)
     lastPositionValid = pos.isValid();
 }
 
-//-------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------- Work with non-volatile settings
 
 void WebMan::loadSettings()
 {
-    this->login = settings->valueNVEC("forum/login", "").toString();
-    this->md5password_utf = settings->valueNVEC("forum/md5password_utf", "").toString();
-    this->md5password = settings->valueNVEC("forum/md5password", "").toString();
+    QString qs = settings->valueNVEC("forum/login", "").toString();
+    QStringList qsl = qs.split(';');
+    if (qsl.length() == 3) {
+        this->login = qsl[0];
+        this->md5password_utf = qsl[1];
+        this->md5password = qsl[2];
+    } else {
+        this->login = "";
+        this->md5password_utf = "";
+        this->md5password = "";
+    }
+    loginChanged(this->login);
 
     m_wantSendPositionInt = settings->valueNV("local/wantSendPositionInt", "60").toInt();
     wantSendPositionIntChanged(m_wantSendPositionInt);
@@ -270,6 +263,19 @@ void WebMan::loadSettings()
     settingsRead = true;
 }
 
+void WebMan::saveSettings()
+{
+    settings->setValueNV("local/positionSourceDefault", m_positionLive ? "True" : "False");
+    settings->setValueNV("local/wantGetTargetsInt", m_wantGetTargetsInt);
+    settings->setValueNV("local/wantGetTargetsBool", m_wantGetTargetsBool);
+    settings->setValueNV("local/iconid", m_icon);
+    settings->setValueNV("local/wantSendPositionInt", m_wantSendPositionInt);
+    settings->setValueNV("local/wantSendPositionBool", m_wantSendPositionBool ? "True" : "False");
+    settings->setValueNV("local/mapType", m_mapType);
+    settings->setValueNV("local/language", m_language);
+    settings->setValueNVEC("forum/login", this->login + ";" + this->md5password_utf + ";" + this->md5password);
+}
+
 //-------------------------------------------------------------------------------------------------------------
 
 void WebMan::setMapType(QString mapType) {
@@ -277,8 +283,6 @@ void WebMan::setMapType(QString mapType) {
 
         m_mapType = mapType;
         mapTypeChanged(m_language);
-
-        settings->setValueNV("local/mapType", m_mapType);
     }
 }
 
@@ -307,8 +311,6 @@ void WebMan::setLanguage(QString localeName) {
         m_language = localeName;
         languageChanged(m_language);
         installTranslator();
-
-        settings->setValueNV("local/language", m_language);
     }
 }
 
@@ -398,10 +400,6 @@ void WebMan::setUser(QString login, QString password)
     this->md5password = QCryptographicHash::hash(str2ent(password), QCryptographicHash::Md5).toHex();
 
     // qDebug() << this->md5password_utf << " : " << this->md5password << endl;
-
-    settings->setValueNVEC("forum/login", this->login);
-    settings->setValueNVEC("forum/md5password_utf", this->md5password_utf);
-    settings->setValueNVEC("forum/md5password", this->md5password);
 
     loginFailed = false;
     loginAttempts = 0;

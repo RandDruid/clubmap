@@ -39,6 +39,7 @@ Item {
     property string fixedPositionLongitude
     property string selectedLanguage
     property string selectedMapType
+    property string login
 
     property int iconId: -1
 
@@ -59,8 +60,12 @@ Item {
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.top: parent.top
+        contentWidth: 360
+        contentHeight: clSettings.implicitHeight
+        ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
         ColumnLayout {
+            id: clSettings
             anchors.rightMargin: 60
             anchors.left: parent.left
             anchors.top: parent.top
@@ -119,11 +124,11 @@ Item {
                     columns: 2
                     rows: 3
 
-                    Text {
+                    Label {
                         Layout.alignment: Qt.AlignLeft
                         text: qsTr("Login")
                     }
-                    Text {
+                    Label {
                         text: qsTr("Password")
                         Layout.alignment: Qt.AlignLeft
                     }
@@ -159,7 +164,7 @@ Item {
 
                 Switch {
                     id: wantGetTargetsItem
-                    text: "Download Club Data"
+                    text: qsTr("Download Club Data")
                     bottomPadding: 4
                     padding: 0
                     Layout.maximumWidth: 263
@@ -183,7 +188,7 @@ Item {
                     enabled: wantGetTargetsBool
                     anchors.fill: parent
 
-                    Text {
+                    Label {
                         id: textGetTargets
                         text: "TIME TIME TIME"
                         Layout.fillWidth: true
@@ -234,7 +239,7 @@ Item {
                     enabled: wantSendPositionBool
 
                     ColumnLayout {
-                        Text {
+                        Label {
                             id: textSendPosition
                             Layout.alignment: Qt.AlignHCenter
                             text: "TIME TIME TIME"
@@ -272,11 +277,11 @@ Item {
                             columns: 2
                             rows: 3
 
-                            Text {
+                            Label {
                                 Layout.alignment: Qt.AlignLeft
                                 text: qsTr("Latitude")
                             }
-                            Text {
+                            Label {
                                 text: qsTr("Longitude")
                                 Layout.alignment: Qt.AlignLeft
                             }
@@ -310,11 +315,11 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
 
-                Text {
+                Label {
                     text: qsTr("Map Type")
-                    leftPadding: 8
+                    fontSizeMode: Text.FixedSize
+                    leftPadding: 4
                     Layout.minimumWidth: 90
-                    font.pointSize: 11
                 }
 
                 ComboBox {
@@ -327,15 +332,15 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
 
-                Text {
+                Label {
                     text: qsTr("Language")
-                    leftPadding: 8
+                    leftPadding: 4
                     Layout.minimumWidth: 90
-                    font.pointSize: 11
                 }
 
                 ComboBox {
                     id: cbSelectLanguage
+                    clip: false
                     Layout.fillWidth: true
                     textRole: "text"
                 }

@@ -12,11 +12,11 @@
         <location filename="forms/AboutForm.ui.qml" line="39"/>
         <source>AboutText</source>
         <translation>&lt;h1&gt;Клубная Карта&lt;/h1&gt;
-&lt;br&gt;Проект для сбора и отображения информации о географическом положение членов форума на карте.
-&lt;br&gt;&lt;b&gt;КлубнаяКарта&lt;/b&gt; лизензирована в соответствии с LGPLv3.
-&lt;br&gt;Исходный код проекта находится на &lt;a href=&quot;https://github.com/RandDruid/ClubMap&quot;&gt;GitHub&lt;/a&gt;
-&lt;br&gt;Автор: Андрей Людвиг
-&lt;br&gt;Помощники: (ваше имя может быть здесь :)</translation>
+&lt;br/&gt;&lt;br/&gt;Проект для сбора и отображения информации о географическом положение членов форума на карте.
+&lt;br/&gt;&lt;br/&gt;&lt;b&gt;КлубнаяКарта&lt;/b&gt; лизензирована в соответствии с LGPLv3.
+&lt;br/&gt;&lt;br/&gt;Исходный код проекта находится на &lt;a href=&quot;https://github.com/RandDruid/ClubMap&quot;&gt;GitHub&lt;/a&gt;
+&lt;br/&gt;&lt;br/&gt;Автор: Андрей Людвиг
+&lt;br/&gt;&lt;br/&gt;Помощники: (ваше имя может быть здесь :)</translation>
     </message>
     <message>
         <location filename="forms/AboutForm.ui.qml" line="21"/>
@@ -42,7 +42,7 @@ every:
         <source>Minimum
 interval:
 </source>
-        <translation>Минимальный интервал: </translation>
+        <translation>Минимум каждые: </translation>
     </message>
     <message>
         <location filename="menus/MainDrawer.qml" line="197"/>
@@ -74,8 +74,9 @@ interval:
         <translation>Всегда в центре</translation>
     </message>
     <message>
+        <location filename="menus/MainDrawerForm.ui.qml" line="162"/>
         <source>Download Club Data</source>
-        <translation type="vanished">Загружать данные</translation>
+        <translation>Загружать данные</translation>
     </message>
     <message>
         <location filename="menus/MainDrawerForm.ui.qml" line="105"/>
@@ -126,17 +127,17 @@ interval:
         <translation>Тип Карты</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="330"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="331"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="344"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="346"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="menus/MainDrawerForm.ui.qml" line="358"/>
+        <location filename="menus/MainDrawerForm.ui.qml" line="360"/>
         <source>Icon</source>
         <translation>Иконка</translation>
     </message>
